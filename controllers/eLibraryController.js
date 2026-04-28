@@ -881,3 +881,31 @@ function buildDocFromBody(b, fileUrl) {
 
   return doc;
 }
+
+  // for mass import and mass delete
+exports.adminGetAll = async (req, res) => {
+  try {
+    const items = await ELibraryItem.find()
+      .select("title libraryType author availability createdAt")
+      .sort({ createdAt: -1 })
+      .lean();
+    res.json({ items });
+  } catch (err) {
+    console.error("adminGetAll error:", err);
+    res.status(500).json({ items: [], error: err.message });
+  }
+};
+
+exports.adminMassDelete = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ success: false, error: "No IDs provided" });
+    }
+    const result = await ELibraryItem.deleteMany({ _id: { $in: ids } });
+    res.json({ success: true, deleted: result.deletedCount });
+  } catch (err) {
+    console.error("adminMassDelete error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

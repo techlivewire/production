@@ -214,9 +214,7 @@ app.post("/addEvent", async (req, res) => {
   }
 });
 
-app.post("/bulkImport" , req,res =>{
-    console.log("Importing the files from xlsx and zip")
-})
+
 
 
 app.post("/updateColCard", upload.array("images", 5), async (req, res) => {

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/style.css" />
     <style>
     .breadcrumb { font-size:.8rem; color:#888; margin-bottom:.75rem; }
-    .breadcrumb a { color:#1c1430; text-decoration:none; }
+    .breadcrumb a { color:#7a7a7a; text-decoration:none; }
     .type-toggle { display:flex; gap:0; margin-bottom:1.5rem; border:1px solid #ddd; border-radius:9px; overflow:hidden; width:fit-content; }
     .type-btn { padding:.6rem 1.5rem; font-size:.88rem; font-weight:600; cursor:pointer; border:none; background:#fff; color:#555; font-family:inherit; transition:all .15s; }
     .type-btn.active { background:#1c1430; color:#fff; }
@@ -37,6 +37,7 @@
   </style>
   </head>
   <body>
+    
     <div class="app">
       <aside class="sidebar">
         <h2>Admin Panel</h2>
@@ -103,18 +104,16 @@
                 <input type="number" name="publicationYear"
                   value="<%= values.publicationYear || '' %>"
                   placeholder="<%= new Date().getFullYear() %>" min="1"
-                  max="<%= new Date().getFullYear()+1 %>">
+                  max="<%= (new Date().getFullYear() + 1) %>"
               </div>
               <div class="form-group">
                 <label>Reading Level</label>
                 <select name="readingLevel">
                   <option value>— Select —</option>
-                  <option value="beginner" <%=values.readingLevel === 'beginner'
-                    ? 'selected':'' %>>Beginner</option>
-                  <option value="intermediate" <%=values.readingLevel ===
-                    'intermediate' ? 'selected':'' %>>Intermediate</option>
-                  <option value="advanced" <%=values.readingLevel === 'advanced'
-                    ? 'selected':'' %>>Advanced</option>
+                  <option value="beginner" <%= values.readingLevel === 'beginner' ? 'selected' : '' %>>
+      <option value="intermediate" <%= values.readingLevel ==='intermediate' ? 'selected':'' %>>Intermediate</option>
+
+                  <option value="advanced" <%= values.readingLevel === 'advanced' ? 'selected':'' %>>Advanced</option>
                 </select>
               </div>
               <div class="form-group full">
@@ -160,10 +159,8 @@
               <div class="form-group spiritual-fields">
                 <label>Darshana (School)</label>
                 <select name="darshana">
-                  <option value>— Select —</option>
-                  <%
-                  ['Vedanta','Samkhya','Yoga','Nyaya','Vaisheshika','Mimamsa'].forEach(d
-                  => { %>
+                  <option value ="">— Select —</option>
+        <%['Vedanta','Samkhya','Yoga','Nyaya','Vaisheshika','Mimamsa'].forEach(d=> { %>
                   <option value="<%= d %>" <%=values.darshana===d?'selected':''
                     %>><%= d %></option>
                   <% }) %>
@@ -184,11 +181,9 @@
                 <select name="practiceType">
                   <option value>— Select —</option>
                   <%
-                  ['Meditation','Yoga','Bhakti','Karma','Mantra','Ritual'].forEach(p
-                  => { %>
+                  ['Meditation','Yoga','Bhakti','Karma','Mantra','Ritual'].forEach(p=> { %>
                   <option value="<%= p %>"
-                    <%=values.practiceType===p?'selected':'' %>><%= p
-                    %></option>
+                    <%=values.practiceType===p?'selected':'' %>><%= p %></option>
                   <% }) %>
                 </select>
               </div>
@@ -203,8 +198,7 @@
                 <select name="spiritualConcept">
                   <option value>— Select —</option>
                   <%
-                  ['Dharma','Karma','Moksha','Atman','Brahman','Maya'].forEach(c
-                  => { %>
+                  ['Dharma','Karma','Moksha','Atman','Brahman','Maya'].forEach(c=> { %>
                   <option value="<%= c %>"
                     <%=values.spiritualConcept===c?'selected':'' %>><%= c
                     %></option>
@@ -238,8 +232,7 @@
                 <label>Historical Period</label>
                 <select name="historicalPeriod">
                   <option value>— Select —</option>
-                  <% ['Vedic','Epic','Puranic','Medieval','Modern'].forEach(h =>
-                  { %>
+                  <% ['Vedic','Epic','Puranic','Medieval','Modern'].forEach(h =>{ %>
                   <option value="<%= h %>"
                     <%=values.historicalPeriod===h?'selected':'' %>><%= h
                     %></option>
@@ -251,8 +244,7 @@
                 <select name="translationType">
                   <option value>— Select —</option>
                   <%
-                  ['Original Sanskrit','Translation','Commentary','Simplified','Scholarly'].forEach(t
-                  => { %>
+                  ['Original Sanskrit','Translation','Commentary','Simplified','Scholarly'].forEach(t=> { %>
                   <option value="<%= t %>"
                     <%=values.translationType===t?'selected':'' %>><%= t
                     %></option>
@@ -264,8 +256,7 @@
                 <select name="audience">
                   <option value>— Select —</option>
                   <%
-                  ['Beginner/Seeker','Practitioner','Advanced','Children/Youth','Scholars'].forEach(a
-                  => { %>
+                  ['Beginner/Seeker','Practitioner','Advanced','Children/Youth','Scholars'].forEach(a=> { %>
                   <option value="<%= a %>" <%=values.audience===a?'selected':''
                     %>><%= a %></option>
                   <% }) %>
@@ -285,11 +276,9 @@
                 <label>Document Type</label>
                 <select name="documentType">
                   <option value>— Select —</option>
-                  <% ['book','journal','thesis','report','article'].forEach(d =>
-                  { %>
+                  <% ['book','journal','thesis','report','article'].forEach(d =>{ %>
                   <option value="<%= d %>"
-                    <%=values.documentType===d?'selected':'' %>><%=
-                    d.charAt(0).toUpperCase()+d.slice(1) %></option>
+                    <%= values.documentType===d?'selected':'' %>><%= d.charAt(0).toUpperCase()+d.slice(1) %></option>
                   <% }) %>
                 </select>
               </div>
@@ -399,13 +388,10 @@ function setType(type) {
   document.getElementById('libraryTypeInput').value = type;
   document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
+  // onclick="setType(event, 'spiritual')"
 
-  document.querySelectorAll('.spiritual-fields').forEach(el => {
-    el.classList.toggle('show', type === 'spiritual');
-  });
-  document.querySelectorAll('.basic-fields').forEach(el => {
-    el.classList.toggle('show', type === 'basic');
-  });
+  document.querySelectorAll('.spiritual-fields').forEach(el => { el.classList.toggle('show', type === 'spiritual');});
+  document.querySelectorAll('.basic-fields').forEach(el => {el.classList.toggle('show', type === 'basic');});
 }
 
 // Init on load

@@ -39,7 +39,8 @@ router.get("/elibrary/:id/download", ctrl.downloadItem);
 // ── Admin ─────────────────────────────────────────────────────────────────────
 router.get("/admin/elibrary",         ctrl.adminList);
 router.get("/admin/elibrary/import",  ctrl.adminImportForm);
-router.post("/admin/elibrary/import", importUpload.fields([
+router.get("/admin/elibrary/api/all",      ctrl.adminGetAll);
+router.post("/admin/elibrary/mass-delete", express.json(), ctrl.adminMassDelete);router.post("/admin/elibrary/import", importUpload.fields([
   { name: "excel", maxCount: 1 },
   { name: "zip",   maxCount: 1 }
 ]), ctrl.adminImport);
