@@ -383,8 +383,19 @@ router.post("/admin/elibrary/import",
 );
 
 
+//  FOR TEMPLATE DOWNLOAD
 
-
+// app.get('/elibrary-template.xlsx', (req, res) => {
+//     // __dirname is the folder where your server script lives
+//     const filePath = path.join(__dirname, 'files', 'elibrary-template.xlsx');
+    
+//     res.download(filePath, 'elibrary-template.xlsx', (err) => {
+//         if (err) {
+//             console.error("File failed to send:", err);
+//             res.status(404).send("File not found");
+//         }
+//     });
+// });
 
 
 
