@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add eLibrary Item – Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+    .breadcrumb { font-size:.8rem; color:#888; margin-bottom:.75rem; }
+    .breadcrumb a { color:#1c1430; text-decoration:none; }
+    .type-toggle { display:flex; gap:0; margin-bottom:1.5rem; border:1px solid #ddd; border-radius:9px; overflow:hidden; width:fit-content; }
+    .type-btn { padding:.6rem 1.5rem; font-size:.88rem; font-weight:600; cursor:pointer; border:none; background:#fff; color:#555; font-family:inherit; transition:all .15s; }
+    .type-btn.active { background:#1c1430; color:#fff; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media(max-width:680px){ .form-grid { grid-template-columns:1fr; } }
+    .form-group { display:flex; flex-direction:column; gap:.3rem; }
+    .form-group.full { grid-column:1/-1; }
+    .form-group label { font-size:.74rem; letter-spacing:.07em; text-transform:uppercase; color:#888; font-weight:500; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding:.55rem .8rem; border:1px solid #ddd; border-radius:8px;
+      font-family:inherit; font-size:.88rem; color:#1c1430;
+      transition:border-color .2s; background:#faf8f4;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline:none; border-color:#e8701a; }
+    .form-group textarea { resize:vertical; min-height:90px; }
+    .checkbox-row { display:flex; align-items:center; gap:.5rem; font-size:.88rem; cursor:pointer; }
+    .checkbox-row input { width:auto; accent-color:#e8701a; }
+    .error-box { background:#ffebee; border:1px solid #ffcdd2; border-radius:8px; padding:.75rem 1rem; font-size:.85rem; color:#c62828; margin-bottom:1.25rem; }
+    .section-divider { grid-column:1/-1; margin:.5rem 0 .25rem; padding-bottom:.5rem; border-bottom:2px solid #f0ebe0; }
+    .section-divider h3 { font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:#888; font-weight:600; }
+    .btn-save { padding:.65rem 1.5rem; background:#1c1430; color:#fff; border:none; border-radius:8px; font-size:.9rem; font-weight:600; cursor:pointer; transition:background .2s; }
+    .btn-save:hover { background:#e8701a; }
+    .btn-cancel { padding:.65rem 1rem; background:transparent; color:#666; border:1px solid #ddd; border-radius:8px; font-size:.88rem; cursor:pointer; text-decoration:none; margin-left:.5rem; }
+    .spiritual-fields, .basic-fields { display:none; }
+    .spiritual-fields.show, .basic-fields.show { display:contents; }
+    .hint { font-size:.72rem; color:#aaa; }
+  </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <h2>Admin Panel</h2>
+        <nav>
+          <a href="/admin">Dashboard</a>
+          <a href="/admin/library">Library</a>
+          <a href="/admin/elibrary" class="active">eLibrary</a>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="header"><h1>Add eLibrary Item</h1></header>
+
+        <section class="card">
+          <p class="breadcrumb"><a href="/admin">Admin</a> › <a
+              href="/admin/elibrary">eLibrary</a> › Add New</p>
+
+          <% if (error) { %>
+          <div class="error-box"><strong>Error:</strong> <%= error %></div>
+          <% } %>
+
+          <!-- Type toggle -->
+          <div style="margin-bottom:1.25rem">
+            <label
+              style="font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:#888;display:block;margin-bottom:.5rem;font-weight:500">Library
+              Type *</label>
+            <div class="type-toggle">
+              <button type="button"
+                class="type-btn <%= values.libraryType !== 'basic' ? 'active' : '' %>"
+                onclick="setType('spiritual')">🕉️ Spiritual</button>
+              <button type="button"
+                class="type-btn <%= values.libraryType === 'basic' ? 'active' : '' %>"
+                onclick="setType('basic')">📚 Basic / Academic</button>
+            </div>
+          </div>
+
+          <form method="POST" action="/admin/elibrary/add"
+            enctype="multipart/form-data" id="addForm">
+            <input type="hidden" name="libraryType" id="libraryTypeInput"
+              value="<%= values.libraryType || 'spiritual' %>">
+
+            <div class="form-grid">
+
+              <!-- ── Core fields (always shown) ── -->
+              <div class="form-group full">
+                <label>Title *</label>
+                <input type="text" name="title"
+                  value="<%= values.title || '' %>" placeholder="Item title"
+                  required>
+              </div>
+              <div class="form-group">
+                <label>Author / Commentator</label>
+                <input type="text" name="author"
+                  value="<%= values.author || '' %>" placeholder="Author name">
+              </div>
+              <div class="form-group">
+                <label>Language</label>
+                <input type="text" name="language"
+                  value="<%= values.language || 'English' %>"
+                  placeholder="English, Hindi, Sanskrit…">
+              </div>
+              <div class="form-group">
+                <label>Publication Year</label>
+                <input type="number" name="publicationYear"
+                  value="<%= values.publicationYear || '' %>"
+                  placeholder="<%= new Date().getFullYear() %>" min="1"
+                  max="<%= new Date().getFullYear()+1 %>">
+              </div>
+              <div class="form-group">
+                <label>Reading Level</label>
+                <select name="readingLevel">
+                  <option value>— Select —</option>
+                  <option value="beginner" <%=values.readingLevel === 'beginner'
+                    ? 'selected':'' %>>Beginner</option>
+                  <option value="intermediate" <%=values.readingLevel ===
+                    'intermediate' ? 'selected':'' %>>Intermediate</option>
+                  <option value="advanced" <%=values.readingLevel === 'advanced'
+                    ? 'selected':'' %>>Advanced</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Description</label>
+                <textarea name="description"
+                  placeholder="Brief description…"><%= values.description || '' %></textarea>
+              </div>
+              <div class="form-group full">
+                <label>Tags <span class="hint">(comma separated)</span></label>
+                <input type="text" name="tags" value="<%= values.tags || '' %>"
+                  placeholder="yoga, dharma, karma…">
+              </div>
+
+              <!-- ── Spiritual fields ── -->
+              <div class="section-divider spiritual-fields"><h3>🕉️ Scripture &
+                  Text</h3></div>
+              <div class="form-group spiritual-fields">
+                <label>Scripture Name</label>
+                <input type="text" name="scriptureName"
+                  value="<%= values.scriptureName || '' %>"
+                  placeholder="Bhagavad Gita, Rigveda…">
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Section / Chapter</label>
+                <input type="text" name="section"
+                  value="<%= values.section || '' %>"
+                  placeholder="Adhyaya 2, Sukta 1…">
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Shloka / Verse</label>
+                <input type="text" name="shloka"
+                  value="<%= values.shloka || '' %>" placeholder="2.47">
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Commentary By</label>
+                <input type="text" name="commentaryBy"
+                  value="<%= values.commentaryBy || '' %>"
+                  placeholder="Adi Shankaracharya…">
+              </div>
+
+              <div class="section-divider spiritual-fields"><h3>🧘 Philosophy &
+                  Practice</h3></div>
+              <div class="form-group spiritual-fields">
+                <label>Darshana (School)</label>
+                <select name="darshana">
+                  <option value>— Select —</option>
+                  <%
+                  ['Vedanta','Samkhya','Yoga','Nyaya','Vaisheshika','Mimamsa'].forEach(d
+                  => { %>
+                  <option value="<%= d %>" <%=values.darshana===d?'selected':''
+                    %>><%= d %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Sampradaya (Lineage)</label>
+                <select name="sampradaya">
+                  <option value>— Select —</option>
+                  <% ['Vaishnav','Shaiva','Shakta','Smarta'].forEach(s => { %>
+                  <option value="<%= s %>"
+                    <%=values.sampradaya===s?'selected':'' %>><%= s %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Practice Type</label>
+                <select name="practiceType">
+                  <option value>— Select —</option>
+                  <%
+                  ['Meditation','Yoga','Bhakti','Karma','Mantra','Ritual'].forEach(p
+                  => { %>
+                  <option value="<%= p %>"
+                    <%=values.practiceType===p?'selected':'' %>><%= p
+                    %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Deity</label>
+                <input type="text" name="deity"
+                  value="<%= values.deity || '' %>"
+                  placeholder="Krishna, Shiva, Durga…">
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Spiritual Concept</label>
+                <select name="spiritualConcept">
+                  <option value>— Select —</option>
+                  <%
+                  ['Dharma','Karma','Moksha','Atman','Brahman','Maya'].forEach(c
+                  => { %>
+                  <option value="<%= c %>"
+                    <%=values.spiritualConcept===c?'selected':'' %>><%= c
+                    %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Lifestyle / Application</label>
+                <select name="lifestyle">
+                  <option value>— Select —</option>
+                  <% ['Ayurveda','Dinacharya','Ethics'].forEach(l => { %>
+                  <option value="<%= l %>" <%=values.lifestyle===l?'selected':''
+                    %>><%= l %></option>
+                  <% }) %>
+                </select>
+              </div>
+
+              <div class="section-divider spiritual-fields"><h3>🕰️ Era &
+                  Interpretation</h3></div>
+              <div class="form-group spiritual-fields">
+                <label>Yuga</label>
+                <select name="yuga">
+                  <option value>— Select —</option>
+                  <% ['Satya','Treta','Dvapara','Kali'].forEach(y => { %>
+                  <option value="<%= y %>" <%=values.yuga===y?'selected':''
+                    %>><%= y %> Yuga</option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Historical Period</label>
+                <select name="historicalPeriod">
+                  <option value>— Select —</option>
+                  <% ['Vedic','Epic','Puranic','Medieval','Modern'].forEach(h =>
+                  { %>
+                  <option value="<%= h %>"
+                    <%=values.historicalPeriod===h?'selected':'' %>><%= h
+                    %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Translation Type</label>
+                <select name="translationType">
+                  <option value>— Select —</option>
+                  <%
+                  ['Original Sanskrit','Translation','Commentary','Simplified','Scholarly'].forEach(t
+                  => { %>
+                  <option value="<%= t %>"
+                    <%=values.translationType===t?'selected':'' %>><%= t
+                    %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group spiritual-fields">
+                <label>Audience</label>
+                <select name="audience">
+                  <option value>— Select —</option>
+                  <%
+                  ['Beginner/Seeker','Practitioner','Advanced','Children/Youth','Scholars'].forEach(a
+                  => { %>
+                  <option value="<%= a %>" <%=values.audience===a?'selected':''
+                    %>><%= a %></option>
+                  <% }) %>
+                </select>
+              </div>
+
+              <!-- ── Basic / Academic fields ── -->
+              <div class="section-divider basic-fields"><h3>📚 Academic
+                  Details</h3></div>
+              <div class="form-group basic-fields">
+                <label>Subject / Category</label>
+                <input type="text" name="category"
+                  value="<%= values.category || '' %>"
+                  placeholder="Science, History, Literature…">
+              </div>
+              <div class="form-group basic-fields">
+                <label>Document Type</label>
+                <select name="documentType">
+                  <option value>— Select —</option>
+                  <% ['book','journal','thesis','report','article'].forEach(d =>
+                  { %>
+                  <option value="<%= d %>"
+                    <%=values.documentType===d?'selected':'' %>><%=
+                    d.charAt(0).toUpperCase()+d.slice(1) %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group basic-fields">
+                <label>Publisher</label>
+                <input type="text" name="publisher"
+                  value="<%= values.publisher || '' %>"
+                  placeholder="Publisher name">
+              </div>
+              <div class="form-group basic-fields">
+                <label>Institution / University</label>
+                <input type="text" name="institution"
+                  value="<%= values.institution || '' %>"
+                  placeholder="Institution name">
+              </div>
+              <div class="form-group basic-fields">
+                <label>Course / Curriculum</label>
+                <input type="text" name="course"
+                  value="<%= values.course || '' %>" placeholder="Course name">
+              </div>
+              <div class="form-group basic-fields">
+                <label>Keywords <span class="hint">(comma
+                    separated)</span></label>
+                <input type="text" name="keywords"
+                  value="<%= values.keywords || '' %>"
+                  placeholder="AI, climate, economics…">
+              </div>
+              <div class="form-group basic-fields full"
+                style="flex-direction:row;align-items:center;gap:.5rem">
+                <label class="checkbox-row">
+                  <input type="checkbox" name="isPeerReviewed"
+                    <%=values.isPeerReviewed ? 'checked' : '' %>>
+                  <span
+                    style="text-transform:none;letter-spacing:0;font-size:.88rem;color:#333;">Peer-reviewed
+                    publication</span>
+                </label>
+              </div>
+
+              <!-- ── File & Access ── -->
+              <div class="section-divider full"><h3>📁 File & Access</h3></div>
+              <div class="form-group">
+                <label>File Format</label>
+                <select name="fileFormat">
+                  <option value>— Select —</option>
+                  <option value="PDF" <%=values.fileFormat==='PDF'
+                    ?'selected':'' %>>PDF</option>
+                  <option value="EPUB" <%=values.fileFormat==='EPUB'
+                    ?'selected':'' %>>EPUB</option>
+                  <option value="DOC" <%=values.fileFormat==='DOC'
+                    ?'selected':'' %>>DOC</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Availability</label>
+                <select name="availability">
+                  <option value="full" <%=values.availability==='full'
+                    ?'selected':'' %>>Full Access</option>
+                  <option value="preview" <%=values.availability==='preview'
+                    ?'selected':'' %>>Preview Only</option>
+                  <option value="restricted"
+                    <%=values.availability==='restricted' ?'selected':''
+                    %>>Restricted</option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label>Upload File</label>
+                <input type="file" name="file" accept=".pdf,.epub,.doc,.docx">
+              </div>
+              <div class="form-group full">
+                <label>Or External File URL</label>
+                <input type="text" name="fileUrl"
+                  value="<%= values.fileUrl || '' %>"
+                  placeholder="https://example.com/file.pdf">
+                <span class="hint">Used only if no file is uploaded above</span>
+              </div>
+              <div class="form-group full"
+                style="flex-direction:row;gap:1.5rem;flex-wrap:wrap">
+                <label class="checkbox-row">
+                  <input type="checkbox" name="isDownloadable"
+                    <%=values.isDownloadable ? 'checked' : '' %>>
+                  <span
+                    style="text-transform:none;letter-spacing:0;font-size:.88rem;color:#333;">Allow
+                    download</span>
+                </label>
+                <label class="checkbox-row">
+                  <input type="checkbox" name="isFeatured" <%=values.isFeatured
+                    ? 'checked' : '' %>>
+                  <span
+                    style="text-transform:none;letter-spacing:0;font-size:.88rem;color:#333;">⭐
+                    Mark as featured</span>
+                </label>
+              </div>
+
+            </div>
+
+            <div style="margin-top:1.5rem;display:flex;align-items:center">
+              <button type="submit" class="btn-save">Save Item</button>
+              <a href="/admin/elibrary" class="btn-cancel">Cancel</a>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script>
+function setType(type) {
+  document.getElementById('libraryTypeInput').value = type;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  document.querySelectorAll('.spiritual-fields').forEach(el => {
+    el.classList.toggle('show', type === 'spiritual');
+  });
+  document.querySelectorAll('.basic-fields').forEach(el => {
+    el.classList.toggle('show', type === 'basic');
+  });
+}
+
+// Init on load
+const initType = document.getElementById('libraryTypeInput').value || 'spiritual';
+document.querySelectorAll('.spiritual-fields').forEach(el => el.classList.toggle('show', initType === 'spiritual'));
+document.querySelectorAll('.basic-fields').forEach(el => el.classList.toggle('show', initType === 'basic'));
+</script>
+  </body>
+</html>

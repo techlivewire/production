@@ -1,0 +1,297 @@
+/* ============================================================
+   NAVBAR — Production
+   Add this into SBU.css, replacing your existing
+   header / .nav / .nav-* rules (Section 4).
+   All colors use var(--primary) — theme-aware.
+   ============================================================ */
+
+/* ── Base shell ─────────────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+
+.navbar-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* ── Logo ───────────────────────────────────────────────────── */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-logo .logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  transition: transform 0.2s ease;
+}
+
+.nav-logo:hover .logo-mark {
+  transform: rotate(-8deg) scale(1.05);
+}
+
+.nav-logo .logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.nav-logo .logo-text span:first-child {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-main);
+}
+
+.nav-logo .logo-text span:last-child {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #888888;
+}
+
+/* ── Desktop nav links ──────────────────────────────────────── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  position: relative;
+  display: inline-block;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-main);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.2rem;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-links a:hover {
+  color: var(--primary);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.nav-links a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ── Desktop CTA button ─────────────────────────────────────── */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.nav-cta:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+  color: var(--white);
+}
+
+/* suppress underline pseudo on CTA */
+.nav-cta::after {
+  display: none;
+}
+
+/* ── Hamburger button ───────────────────────────────────────── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  gap: 5px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.nav-hamburger:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-main);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger → X animation */
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Mobile drawer ──────────────────────────────────────────── */
+.nav-drawer {
+  display: none;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.98);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.nav-drawer.open {
+  max-height: 420px;
+  opacity: 1;
+}
+
+.nav-drawer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-drawer-inner a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-main);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.nav-drawer-inner a:last-of-type {
+  border-bottom: none;
+}
+
+.nav-drawer-inner a:hover {
+  color: var(--primary);
+  padding-left: 0.9rem;
+}
+
+.nav-drawer-inner .drawer-cta {
+  margin-top: 0.9rem;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-bottom: none;
+  transition: opacity 0.2s ease;
+}
+
+.nav-drawer-inner .drawer-cta:hover {
+  opacity: 0.88;
+  padding-left: 1.25rem;
+  color: var(--white);
+}
+
+/* ── Responsive breakpoints ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-links,
+  .nav-cta {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-drawer {
+    display: block;
+  }
+}
+
+@media (max-width: 400px) {
+  .navbar-inner {
+    height: 56px;
+  }
+}

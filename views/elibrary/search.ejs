@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>eLibrary – Search & Browse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --saffron: #e8701a;
+      --deep:    #1c1430;
+      --lotus:   #c0392b;
+      --gold:    #d4a017;
+      --sage:    #2e7d32;
+      --mist:    #faf8f4;
+      --cream:   #f5f0e8;
+      --sand:    #ede5d4;
+      --border:  #ddd5c0;
+      --ink:     #2c2416;
+      --muted:   #7a6e5f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--mist); color: var(--ink); min-height: 100vh; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--deep) 0%, #2d1f4e 50%, #1a0f2e 100%);
+      color: #fff;
+      padding: 3.5rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '🕉';
+      position: absolute;
+      right: 3rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 8rem;
+      opacity: .06;
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 1400px; margin: 0 auto; }
+    .hero-back { color: var(--gold); text-decoration: none; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1rem; opacity: .85; }
+    .hero-back:hover { opacity: 1; }
+    .hero h1 { font-family: 'Crimson Pro', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 600; letter-spacing: -.01em; }
+    .hero h1 span { color: var(--gold); }
+    .hero p { color: rgba(255,255,255,.6); font-size: .95rem; margin-top: .5rem; }
+
+    /* ── Type tabs ── */
+    .type-tabs { background: var(--deep); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .type-tabs-inner { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 0; }
+    .type-tab { padding: .9rem 1.75rem; color: rgba(255,255,255,.5); font-size: .88rem; font-weight: 500; text-decoration: none; border-bottom: 3px solid transparent; transition: all .2s; cursor: pointer; background: none; border-top: none; border-left: none; border-right: none; font-family: 'Inter', sans-serif; }
+    .type-tab:hover { color: rgba(255,255,255,.85); }
+    .type-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* ── Main layout ── */
+    .main-layout { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem 4rem; display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
+    @media(max-width:1024px) { .main-layout { grid-template-columns: 260px 1fr; } }
+    @media(max-width:768px)  { .main-layout { grid-template-columns: 1fr; } }
+
+    /* ── Filter panel ── */
+    .filter-panel { position: sticky; top: 1.5rem; height: fit-content; }
+    .filter-form { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .filter-header { padding: 1rem 1.25rem; background: var(--deep); color: #fff; display: flex; align-items: center; justify-content: space-between; }
+    .filter-header h3 { font-size: .9rem; font-weight: 600; letter-spacing: .04em; }
+    .filter-header a { font-size: .75rem; color: var(--gold); text-decoration: none; opacity: .85; }
+    .filter-header a:hover { opacity: 1; }
+
+    .filter-section { border-bottom: 1px solid var(--border); }
+    .filter-section-head { padding: .75rem 1.25rem; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--cream); display: flex; align-items: center; gap: .4rem; cursor: pointer; user-select: none; }
+    .filter-section-body { padding: .85rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; }
+    .filter-section-body.collapsed { display: none; }
+
+    .f-group label { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: .3rem; }
+    .f-group input, .f-group select {
+      width: 100%; padding: .5rem .75rem; border: 1px solid var(--border); border-radius: 7px;
+      font-family: 'Inter', sans-serif; font-size: .83rem; color: var(--ink); background: var(--mist);
+      transition: border-color .2s;
+      appearance: none;
+    }
+    .f-group select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2rem;
+    }
+    .f-group input:focus, .f-group select:focus { outline: none; border-color: var(--saffron); }
+
+    .f-checkbox { display: flex; align-items: center; gap: .5rem; font-size: .83rem; color: var(--ink); cursor: pointer; }
+    .f-checkbox input { width: auto; accent-color: var(--saffron); }
+
+    .filter-footer { padding: 1rem 1.25rem; display: flex; gap: .5rem; }
+    .btn-search { flex: 1; padding: .65rem; background: var(--saffron); color: #fff; border: none; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: .88rem; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn-search:hover { background: #c85e14; }
+    .btn-reset { padding: .65rem .9rem; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-size: .83rem; cursor: pointer; text-decoration: none; font-family: 'Inter', sans-serif; }
+    .btn-reset:hover { background: var(--cream); }
+
+    /* ── Results area ── */
+    .results-area {}
+    .results-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: .75rem; }
+    .results-count { font-size: .88rem; color: var(--muted); }
+    .results-count strong { color: var(--ink); }
+    .sort-select { padding: .45rem .75rem; border: 1px solid var(--border); border-radius: 7px; font-family: 'Inter', sans-serif; font-size: .83rem; background: #fff; color: var(--ink); appearance: none; padding-right: 1.75rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .6rem center; }
+
+    /* ── Cards grid ── */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
+
+    .eli-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; }
+    .eli-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.08); }
+
+    .card-top { padding: .9rem 1.1rem .4rem; display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+    .card-badges { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .badge { font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; padding: .18rem .5rem; border-radius: 4px; }
+    .badge-spiritual { background: #fef3e2; color: #e67e22; }
+    .badge-basic     { background: #e8f5e9; color: #2e7d32; }
+    .badge-type      { background: var(--cream); color: var(--muted); }
+    .badge-fmt       { background: #e3f2fd; color: #1565c0; }
+    .badge-featured  { background: #fff3e0; color: #e65100; }
+
+    .card-avail { font-size: .65rem; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+    .card-avail.full       { color: var(--sage); }
+    .card-avail.preview    { color: var(--gold); }
+    .card-avail.restricted { color: var(--lotus); }
+
+    .card-body { padding: .4rem 1.1rem .9rem; flex: 1; display: flex; flex-direction: column; gap: .3rem; }
+    .card-title { font-family: 'Crimson Pro', serif; font-size: 1.05rem; font-weight: 600; line-height: 1.3; color: var(--ink); }
+    .card-author { font-size: .78rem; color: var(--muted); }
+    .card-desc { font-size: .8rem; color: #666; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; flex: 1; margin-top: .1rem; }
+    .card-meta { display: flex; gap: .75rem; font-size: .72rem; color: #aaa; margin-top: .5rem; }
+
+    .card-extra { font-size: .72rem; color: var(--saffron); margin-top: .25rem; font-weight: 500; }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .4rem; }
+    .tag-chip { font-size: .65rem; padding: .15rem .4rem; background: var(--cream); border-radius: 20px; color: var(--muted); }
+
+    .card-footer { padding: .75rem 1.1rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .card-category { font-size: .72rem; color: var(--sage); font-weight: 500; }
+    .btn-view { padding: .38rem .85rem; background: var(--deep); color: #fff; border: none; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: .78rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: background .2s; }
+    .btn-view:hover { background: var(--saffron); }
+
+    /* ── Empty state ── */
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 5rem 2rem; color: var(--muted); }
+    .empty-state .icon { font-size: 3.5rem; margin-bottom: 1rem; opacity: .3; }
+    .empty-state h3 { font-family: 'Crimson Pro', serif; font-size: 1.4rem; margin-bottom: .5rem; color: var(--ink); }
+    .empty-state p { font-size: .88rem; }
+
+    /* ── Start state ── */
+    .start-state { grid-column: 1/-1; text-align: center; padding: 5rem 2rem; }
+    .start-state .icon { font-size: 4rem; margin-bottom: 1.25rem; }
+    .start-state h3 { font-family: 'Crimson Pro', serif; font-size: 1.6rem; color: var(--ink); margin-bottom: .5rem; }
+    .start-state p { color: var(--muted); font-size: .9rem; max-width: 380px; margin: 0 auto; }
+
+    /* ── Pagination ── */
+    .pagination { margin-top: 2.5rem; display: flex; justify-content: center; gap: .4rem; flex-wrap: wrap; }
+    .pag-btn { padding: .45rem .85rem; border: 1px solid var(--border); border-radius: 7px; background: #fff; color: var(--ink); font-size: .83rem; text-decoration: none; transition: all .15s; }
+    .pag-btn:hover, .pag-btn.active { background: var(--deep); border-color: var(--deep); color: #fff; }
+    .pag-btn.disabled { opacity: .35; pointer-events: none; }
+
+    /* ── Active filters strip ── */
+    .active-filters { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .af-chip { display: inline-flex; align-items: center; gap: .3rem; padding: .25rem .65rem; background: var(--deep); color: #fff; border-radius: 20px; font-size: .72rem; }
+    .af-chip a { color: rgba(255,255,255,.7); text-decoration: none; font-size: .8rem; }
+    .af-chip a:hover { color: #fff; }
+
+    /* spiritual fields only show when type = spiritual */
+    .spiritual-only { display: none; }
+    .basic-only     { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <a href="/" class="hero-back"><i class="fas fa-arrow-left"></i> Home</a>
+    <h1>e<span>Library</span></h1>
+    <p>Search across spiritual scriptures, academic publications and more</p>
+  </div>
+</div>
+
+<!-- Type tabs -->
+<div class="type-tabs">
+  <div class="type-tabs-inner">
+    <a href="/elibrary" class="type-tab <%= !query.libraryType ? 'active' : '' %>">All</a>
+    <a href="/elibrary?libraryType=spiritual" class="type-tab <%= query.libraryType === 'spiritual' ? 'active' : '' %>">🕉️ Spiritual</a>
+    <a href="/elibrary?libraryType=basic"     class="type-tab <%= query.libraryType === 'basic'     ? 'active' : '' %>">📚 Academic / Basic</a>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main-layout">
+
+  <!-- Filter sidebar -->
+  <aside class="filter-panel">
+    <form class="filter-form" method="GET" action="/elibrary" id="filterForm">
+
+      <!-- preserve type tab -->
+      <% if (query.libraryType) { %>
+        <input type="hidden" name="libraryType" value="<%= query.libraryType %>">
+      <% } %>
+
+      <div class="filter-header">
+        <h3><i class="fas fa-sliders-h" style="margin-right:.4rem"></i>Advanced Search</h3>
+        <a href="/elibrary<%= query.libraryType ? '?libraryType=' + query.libraryType : '' %>">Clear all</a>
+      </div>
+
+      <!-- Core filters (always visible) -->
+      <div class="filter-section">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          <i class="fas fa-search"></i> Core Filters <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>Title / Keyword</label>
+            <input type="text" name="title" value="<%= query.title || '' %>" placeholder="Search title…">
+          </div>
+          <div class="f-group">
+            <label>Author / Commentator</label>
+            <input type="text" name="author" value="<%= query.author || '' %>" placeholder="Author name…">
+          </div>
+          <div class="f-group">
+            <label>Language</label>
+            <select name="language">
+              <option value="">All Languages</option>
+              <option value="English"   <%= query.language === 'English'   ? 'selected' : '' %>>English</option>
+              <option value="Hindi"     <%= query.language === 'Hindi'     ? 'selected' : '' %>>Hindi</option>
+              <option value="Sanskrit"  <%= query.language === 'Sanskrit'  ? 'selected' : '' %>>Sanskrit</option>
+              <option value="Tamil"     <%= query.language === 'Tamil'     ? 'selected' : '' %>>Tamil</option>
+              <option value="Bengali"   <%= query.language === 'Bengali'   ? 'selected' : '' %>>Bengali</option>
+              <option value="Telugu"    <%= query.language === 'Telugu'    ? 'selected' : '' %>>Telugu</option>
+              <% languages.forEach(l => { %>
+                <% if (!['English','Hindi','Sanskrit','Tamil','Bengali','Telugu'].includes(l)) { %>
+                  <option value="<%= l %>" <%= query.language === l ? 'selected' : '' %>><%= l %></option>
+                <% } %>
+              <% }) %>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Reading Level</label>
+            <select name="readingLevel">
+              <option value="">All Levels</option>
+              <option value="beginner"     <%= query.readingLevel === 'beginner'     ? 'selected' : '' %>>Beginner</option>
+              <option value="intermediate" <%= query.readingLevel === 'intermediate' ? 'selected' : '' %>>Intermediate</option>
+              <option value="advanced"     <%= query.readingLevel === 'advanced'     ? 'selected' : '' %>>Advanced</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Tags (comma separated)</label>
+            <input type="text" name="tags" value="<%= query.tags || '' %>" placeholder="yoga, dharma, karma…">
+          </div>
+        </div>
+      </div>
+
+      <!-- Format & access -->
+      <div class="filter-section">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          <i class="fas fa-file-alt"></i> Format & Access <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>File Format</label>
+            <select name="fileFormat">
+              <option value="">All Formats</option>
+              <option value="PDF"  <%= query.fileFormat === 'PDF'  ? 'selected' : '' %>>PDF</option>
+              <option value="EPUB" <%= query.fileFormat === 'EPUB' ? 'selected' : '' %>>EPUB</option>
+              <option value="DOC"  <%= query.fileFormat === 'DOC'  ? 'selected' : '' %>>DOC</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Availability</label>
+            <select name="availability">
+              <option value="">All</option>
+              <option value="full"       <%= query.availability === 'full'       ? 'selected' : '' %>>Full Access</option>
+              <option value="preview"    <%= query.availability === 'preview'    ? 'selected' : '' %>>Preview Only</option>
+              <option value="restricted" <%= query.availability === 'restricted' ? 'selected' : '' %>>Restricted</option>
+            </select>
+          </div>
+          <label class="f-checkbox">
+            <input type="checkbox" name="isDownloadable" value="true" <%= query.isDownloadable ? 'checked' : '' %>>
+            Downloadable only
+          </label>
+          <label class="f-checkbox">
+            <input type="checkbox" name="isFeatured" value="true" <%= query.isFeatured ? 'checked' : '' %>>
+            Featured only
+          </label>
+        </div>
+      </div>
+
+      <!-- Basic / Academic filters -->
+      <div class="filter-section" id="basicSection" style="<%= (!query.libraryType || query.libraryType === 'basic') ? '' : 'display:none' %>">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          <i class="fas fa-graduation-cap"></i> Academic Filters <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>Subject / Category</label>
+            <select name="category">
+              <option value="">All Categories</option>
+              <% categories.forEach(c => { %>
+                <option value="<%= c %>" <%= query.category === c ? 'selected' : '' %>><%= c %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Document Type</label>
+            <select name="documentType">
+              <option value="">All Types</option>
+              <option value="book"    <%= query.documentType === 'book'    ? 'selected' : '' %>>Book</option>
+              <option value="journal" <%= query.documentType === 'journal' ? 'selected' : '' %>>Journal</option>
+              <option value="thesis"  <%= query.documentType === 'thesis'  ? 'selected' : '' %>>Thesis</option>
+              <option value="report"  <%= query.documentType === 'report'  ? 'selected' : '' %>>Report</option>
+              <option value="article" <%= query.documentType === 'article' ? 'selected' : '' %>>Article</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Publisher</label>
+            <input type="text" name="publisher" value="<%= query.publisher || '' %>" placeholder="Publisher name…">
+          </div>
+          <div class="f-group">
+            <label>Institution / University</label>
+            <input type="text" name="institution" value="<%= query.institution || '' %>" placeholder="Institution…">
+          </div>
+          <div class="f-group">
+            <label>Course / Curriculum</label>
+            <input type="text" name="course" value="<%= query.course || '' %>" placeholder="Course name…">
+          </div>
+          <label class="f-checkbox">
+            <input type="checkbox" name="isPeerReviewed" value="true" <%= query.isPeerReviewed ? 'checked' : '' %>>
+            Peer-reviewed only
+          </label>
+        </div>
+      </div>
+
+      <!-- Spiritual filters -->
+      <div class="filter-section" id="spiritualSection" style="<%= (!query.libraryType || query.libraryType === 'spiritual') ? '' : 'display:none' %>">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          🕉️ Scripture & Text <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>Scripture Name</label>
+            <select name="scriptureName">
+              <option value="">All Scriptures</option>
+              <option value="Bhagavad Gita" <%= query.scriptureName === 'Bhagavad Gita' ? 'selected' : '' %>>Bhagavad Gita</option>
+              <option value="Rigveda"       <%= query.scriptureName === 'Rigveda'       ? 'selected' : '' %>>Rigveda</option>
+              <option value="Upanishads"    <%= query.scriptureName === 'Upanishads'    ? 'selected' : '' %>>Upanishads</option>
+              <option value="Mahabharata"   <%= query.scriptureName === 'Mahabharata'   ? 'selected' : '' %>>Mahabharata</option>
+              <option value="Ramayana"      <%= query.scriptureName === 'Ramayana'      ? 'selected' : '' %>>Ramayana</option>
+              <option value="Puranas"       <%= query.scriptureName === 'Puranas'       ? 'selected' : '' %>>Puranas</option>
+              <option value="Yoga Sutras"   <%= query.scriptureName === 'Yoga Sutras'   ? 'selected' : '' %>>Yoga Sutras</option>
+              <% scriptureNames.forEach(s => { %>
+                <% const defaults = ['Bhagavad Gita','Rigveda','Upanishads','Mahabharata','Ramayana','Puranas','Yoga Sutras']; %>
+                <% if (!defaults.includes(s)) { %>
+                  <option value="<%= s %>" <%= query.scriptureName === s ? 'selected' : '' %>><%= s %></option>
+                <% } %>
+              <% }) %>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Section / Chapter</label>
+            <input type="text" name="section" value="<%= query.section || '' %>" placeholder="Adhyaya, Sukta…">
+          </div>
+          <div class="f-group">
+            <label>Shloka / Verse</label>
+            <input type="text" name="shloka" value="<%= query.shloka || '' %>" placeholder="e.g. 2.47">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-section" id="spiritualSection2" style="<%= (!query.libraryType || query.libraryType === 'spiritual') ? '' : 'display:none' %>">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          🧘 Philosophy & Tradition <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>Philosophical School (Darshana)</label>
+            <select name="darshana">
+              <option value="">All</option>
+              <option value="Vedanta"     <%= query.darshana === 'Vedanta'     ? 'selected' : '' %>>Vedanta</option>
+              <option value="Samkhya"     <%= query.darshana === 'Samkhya'     ? 'selected' : '' %>>Samkhya</option>
+              <option value="Yoga"        <%= query.darshana === 'Yoga'        ? 'selected' : '' %>>Yoga</option>
+              <option value="Nyaya"       <%= query.darshana === 'Nyaya'       ? 'selected' : '' %>>Nyaya</option>
+              <option value="Vaisheshika" <%= query.darshana === 'Vaisheshika' ? 'selected' : '' %>>Vaisheshika</option>
+              <option value="Mimamsa"     <%= query.darshana === 'Mimamsa'     ? 'selected' : '' %>>Mimamsa</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Sampradaya (Lineage)</label>
+            <select name="sampradaya">
+              <option value="">All</option>
+              <option value="Vaishnav" <%= query.sampradaya === 'Vaishnav' ? 'selected' : '' %>>Vaishnav</option>
+              <option value="Shaiva"   <%= query.sampradaya === 'Shaiva'   ? 'selected' : '' %>>Shaiva</option>
+              <option value="Shakta"   <%= query.sampradaya === 'Shakta'   ? 'selected' : '' %>>Shakta</option>
+              <option value="Smarta"   <%= query.sampradaya === 'Smarta'   ? 'selected' : '' %>>Smarta</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Commentary By</label>
+            <input type="text" name="commentaryBy" value="<%= query.commentaryBy || '' %>" placeholder="e.g. Shankaracharya…">
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-section" id="spiritualSection3" style="<%= (!query.libraryType || query.libraryType === 'spiritual') ? '' : 'display:none' %>">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          🙏 Practice & Deity <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>Type of Practice</label>
+            <select name="practiceType">
+              <option value="">All Practices</option>
+              <option value="Meditation" <%= query.practiceType === 'Meditation' ? 'selected' : '' %>>Meditation</option>
+              <option value="Yoga"       <%= query.practiceType === 'Yoga'       ? 'selected' : '' %>>Yoga</option>
+              <option value="Bhakti"     <%= query.practiceType === 'Bhakti'     ? 'selected' : '' %>>Bhakti (Devotion)</option>
+              <option value="Karma"      <%= query.practiceType === 'Karma'      ? 'selected' : '' %>>Karma (Action)</option>
+              <option value="Mantra"     <%= query.practiceType === 'Mantra'     ? 'selected' : '' %>>Mantra / Chant</option>
+              <option value="Ritual"     <%= query.practiceType === 'Ritual'     ? 'selected' : '' %>>Ritual (Puja/Yajna)</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Deity</label>
+            <select name="deity">
+              <option value="">All Deities</option>
+              <option value="Krishna" <%= query.deity === 'Krishna' ? 'selected' : '' %>>Krishna</option>
+              <option value="Shiva"   <%= query.deity === 'Shiva'   ? 'selected' : '' %>>Shiva</option>
+              <option value="Durga"   <%= query.deity === 'Durga'   ? 'selected' : '' %>>Durga</option>
+              <option value="Vishnu"  <%= query.deity === 'Vishnu'  ? 'selected' : '' %>>Vishnu</option>
+              <option value="Ganesha" <%= query.deity === 'Ganesha' ? 'selected' : '' %>>Ganesha</option>
+              <option value="Rama"    <%= query.deity === 'Rama'    ? 'selected' : '' %>>Rama</option>
+              <% deities.forEach(d => { %>
+                <% const defaults2 = ['Krishna','Shiva','Durga','Vishnu','Ganesha','Rama']; %>
+                <% if (!defaults2.includes(d)) { %>
+                  <option value="<%= d %>" <%= query.deity === d ? 'selected' : '' %>><%= d %></option>
+                <% } %>
+              <% }) %>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Spiritual Concept</label>
+            <select name="spiritualConcept">
+              <option value="">All Concepts</option>
+              <option value="Dharma"  <%= query.spiritualConcept === 'Dharma'  ? 'selected' : '' %>>Dharma</option>
+              <option value="Karma"   <%= query.spiritualConcept === 'Karma'   ? 'selected' : '' %>>Karma</option>
+              <option value="Moksha"  <%= query.spiritualConcept === 'Moksha'  ? 'selected' : '' %>>Moksha</option>
+              <option value="Atman"   <%= query.spiritualConcept === 'Atman'   ? 'selected' : '' %>>Atman</option>
+              <option value="Brahman" <%= query.spiritualConcept === 'Brahman' ? 'selected' : '' %>>Brahman</option>
+              <option value="Maya"    <%= query.spiritualConcept === 'Maya'    ? 'selected' : '' %>>Maya</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-section" id="spiritualSection4" style="<%= (!query.libraryType || query.libraryType === 'spiritual') ? '' : 'display:none' %>">
+        <div class="filter-section-head" onclick="toggleSection(this)">
+          🕰️ Era & Interpretation <i class="fas fa-chevron-down" style="margin-left:auto"></i>
+        </div>
+        <div class="filter-section-body">
+          <div class="f-group">
+            <label>Yuga / Era</label>
+            <select name="yuga">
+              <option value="">All Yugas</option>
+              <option value="Satya"    <%= query.yuga === 'Satya'    ? 'selected' : '' %>>Satya Yuga</option>
+              <option value="Treta"    <%= query.yuga === 'Treta'    ? 'selected' : '' %>>Treta Yuga</option>
+              <option value="Dvapara"  <%= query.yuga === 'Dvapara'  ? 'selected' : '' %>>Dvapara Yuga</option>
+              <option value="Kali"     <%= query.yuga === 'Kali'     ? 'selected' : '' %>>Kali Yuga</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Historical Period</label>
+            <select name="historicalPeriod">
+              <option value="">All Periods</option>
+              <option value="Vedic"    <%= query.historicalPeriod === 'Vedic'    ? 'selected' : '' %>>Vedic</option>
+              <option value="Epic"     <%= query.historicalPeriod === 'Epic'     ? 'selected' : '' %>>Epic (Mahabharat/Ramayan)</option>
+              <option value="Puranic"  <%= query.historicalPeriod === 'Puranic'  ? 'selected' : '' %>>Puranic</option>
+              <option value="Medieval" <%= query.historicalPeriod === 'Medieval' ? 'selected' : '' %>>Medieval</option>
+              <option value="Modern"   <%= query.historicalPeriod === 'Modern'   ? 'selected' : '' %>>Modern</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Translation Type</label>
+            <select name="translationType">
+              <option value="">All</option>
+              <option value="Original Sanskrit" <%= query.translationType === 'Original Sanskrit' ? 'selected' : '' %>>Original Sanskrit</option>
+              <option value="Translation"       <%= query.translationType === 'Translation'       ? 'selected' : '' %>>Translation</option>
+              <option value="Commentary"        <%= query.translationType === 'Commentary'        ? 'selected' : '' %>>Commentary</option>
+              <option value="Simplified"        <%= query.translationType === 'Simplified'        ? 'selected' : '' %>>Simplified</option>
+              <option value="Scholarly"         <%= query.translationType === 'Scholarly'         ? 'selected' : '' %>>Scholarly</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Audience</label>
+            <select name="audience">
+              <option value="">All</option>
+              <option value="Beginner/Seeker"  <%= query.audience === 'Beginner/Seeker'  ? 'selected' : '' %>>Beginner / Seeker</option>
+              <option value="Practitioner"     <%= query.audience === 'Practitioner'     ? 'selected' : '' %>>Practitioner</option>
+              <option value="Advanced"         <%= query.audience === 'Advanced'         ? 'selected' : '' %>>Advanced</option>
+              <option value="Children/Youth"   <%= query.audience === 'Children/Youth'   ? 'selected' : '' %>>Children / Youth</option>
+              <option value="Scholars"         <%= query.audience === 'Scholars'         ? 'selected' : '' %>>Scholars</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Lifestyle / Application</label>
+            <select name="lifestyle">
+              <option value="">All</option>
+              <option value="Ayurveda"   <%= query.lifestyle === 'Ayurveda'   ? 'selected' : '' %>>Ayurveda / Health</option>
+              <option value="Dinacharya" <%= query.lifestyle === 'Dinacharya' ? 'selected' : '' %>>Daily Practices</option>
+              <option value="Ethics"     <%= query.lifestyle === 'Ethics'     ? 'selected' : '' %>>Ethics / Life Guidance</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-footer">
+        <button type="submit" class="btn-search"><i class="fas fa-search" style="margin-right:.4rem"></i>Search</button>
+        <a href="/elibrary<%= query.libraryType ? '?libraryType=' + query.libraryType : '' %>" class="btn-reset">Reset</a>
+      </div>
+
+    </form>
+  </aside>
+
+  <!-- Results -->
+  <div class="results-area">
+
+    <!-- Active filter chips -->
+    <%
+      const filterLabels = {
+        title:'Title', author:'Author', language:'Language', readingLevel:'Level',
+        tags:'Tags', fileFormat:'Format', availability:'Availability',
+        category:'Category', documentType:'Type', publisher:'Publisher',
+        institution:'Institution', course:'Course',
+        scriptureName:'Scripture', section:'Section', shloka:'Shloka',
+        darshana:'Darshana', sampradaya:'Sampradaya', commentaryBy:'Commentary',
+        practiceType:'Practice', deity:'Deity', spiritualConcept:'Concept',
+        yuga:'Yuga', historicalPeriod:'Period', translationType:'Translation',
+        audience:'Audience', lifestyle:'Lifestyle'
+      };
+      const activeFilters = Object.entries(query).filter(([k,v]) => v && k !== 'page' && k !== 'sort' && k !== 'libraryType' && filterLabels[k]);
+    %>
+    <% if (activeFilters.length) { %>
+      <div class="active-filters">
+        <% activeFilters.forEach(([k, v]) => { %>
+          <span class="af-chip">
+            <%= filterLabels[k] %>: <strong style="margin-left:.2rem"><%= v %></strong>
+            <%
+              const rest = Object.fromEntries(Object.entries(query).filter(([ek]) => ek !== k));
+              const restStr = new URLSearchParams(rest).toString();
+            %>
+            <a href="/elibrary<%= restStr ? '?' + restStr : '' %>">✕</a>
+          </span>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <% if (hasSearch) { %>
+      <div class="results-toolbar">
+        <p class="results-count">
+          <strong><%= total %></strong> result<%= total !== 1 ? 's' : '' %> found
+        </p>
+        <form method="GET" action="/elibrary" id="sortForm">
+          <% Object.entries(query).forEach(([k,v]) => { %>
+            <% if (k !== 'sort' && k !== 'page') { %>
+              <input type="hidden" name="<%= k %>" value="<%= v %>">
+            <% } %>
+          <% }) %>
+          <select name="sort" class="sort-select" onchange="document.getElementById('sortForm').submit()">
+            <option value="recent"        <%= (query.sort||'recent') === 'recent'        ? 'selected' : '' %>>Most Recent</option>
+            <option value="mostViewed"    <%= query.sort === 'mostViewed'                ? 'selected' : '' %>>Most Viewed</option>
+            <option value="mostDownloaded"<%= query.sort === 'mostDownloaded'            ? 'selected' : '' %>>Most Downloaded</option>
+            <option value="featured"      <%= query.sort === 'featured'                  ? 'selected' : '' %>>Featured First</option>
+            <option value="az"            <%= query.sort === 'az'                        ? 'selected' : '' %>>A → Z</option>
+            <option value="oldest"        <%= query.sort === 'oldest'                    ? 'selected' : '' %>>Oldest First</option>
+          </select>
+        </form>
+      </div>
+    <% } %>
+
+    <div class="cards-grid">
+
+      <% if (!hasSearch) { %>
+        <div class="start-state">
+          <div class="icon">📖</div>
+          <h3>Search the eLibrary</h3>
+          <p>Use the filters on the left to search across spiritual scriptures and academic publications.</p>
+        </div>
+
+      <% } else if (items.length === 0) { %>
+        <div class="empty-state">
+          <div class="icon"><i class="fas fa-search"></i></div>
+          <h3>No results found</h3>
+          <p>Try adjusting your filters or <a href="/elibrary" style="color:var(--saffron)">clear all</a>.</p>
+        </div>
+
+      <% } else { %>
+        <% items.forEach(item => { %>
+          <div class="eli-card">
+            <div class="card-top">
+              <div class="card-badges">
+                <span class="badge badge-<%= item.libraryType %>"><%= item.libraryType %></span>
+                <% if (item.libraryType === 'basic' && item.basic?.documentType) { %>
+                  <span class="badge badge-type"><%= item.basic.documentType %></span>
+                <% } %>
+                <% if (item.libraryType === 'spiritual' && item.spiritual?.scriptureName) { %>
+                  <span class="badge badge-type"><%= item.spiritual.scriptureName %></span>
+                <% } %>
+                <% if (item.fileFormat) { %><span class="badge badge-fmt"><%= item.fileFormat %></span><% } %>
+                <% if (item.isFeatured) { %><span class="badge badge-featured">⭐ Featured</span><% } %>
+              </div>
+              <span class="card-avail <%= item.availability %>">
+                <% if (item.availability === 'full')       { %>● Full<% } %>
+                <% if (item.availability === 'preview')    { %>◑ Preview<% } %>
+                <% if (item.availability === 'restricted') { %>○ Restricted<% } %>
+              </span>
+            </div>
+
+            <div class="card-body">
+              <div class="card-title"><%= item.title %></div>
+              <% if (item.author) { %>
+                <div class="card-author">by <%= item.author %><% if (item.publicationYear) { %> · <%= item.publicationYear %><% } %></div>
+              <% } %>
+              <% if (item.description) { %>
+                <p class="card-desc"><%= item.description %></p>
+              <% } %>
+
+              <% if (item.libraryType === 'spiritual') { %>
+                <% if (item.spiritual?.darshana || item.spiritual?.practiceType || item.spiritual?.deity) { %>
+                  <div class="card-extra">
+                    <% if (item.spiritual.darshana) { %><%= item.spiritual.darshana %><% } %>
+                    <% if (item.spiritual.practiceType) { %> · <%= item.spiritual.practiceType %><% } %>
+                    <% if (item.spiritual.deity) { %> · <%= item.spiritual.deity %><% } %>
+                  </div>
+                <% } %>
+              <% } %>
+              <% if (item.libraryType === 'basic') { %>
+                <% if (item.basic?.category || item.basic?.publisher) { %>
+                  <div class="card-extra">
+                    <% if (item.basic.category) { %><%= item.basic.category %><% } %>
+                    <% if (item.basic.publisher) { %> · <%= item.basic.publisher %><% } %>
+                  </div>
+                <% } %>
+              <% } %>
+
+              <div class="card-meta">
+                <span><i class="fas fa-eye"></i> <%= item.views %></span>
+                <% if (item.isDownloadable) { %><span><i class="fas fa-download"></i> <%= item.downloads %></span><% } %>
+                <% if (item.language) { %><span><i class="fas fa-globe"></i> <%= item.language %></span><% } %>
+                <% if (item.readingLevel) { %><span><i class="fas fa-signal"></i> <%= item.readingLevel %></span><% } %>
+              </div>
+
+              <% if (item.tags && item.tags.length) { %>
+                <div class="card-tags">
+                  <% item.tags.slice(0,3).forEach(t => { %>
+                    <span class="tag-chip">#<%= t %></span>
+                  <% }) %>
+                </div>
+              <% } %>
+            </div>
+
+            <div class="card-footer">
+              <span class="card-category">
+                <% if (item.libraryType === 'basic' && item.basic?.category) { %>
+                  <i class="fas fa-folder" style="font-size:.65rem;margin-right:.25rem"></i><%= item.basic.category %>
+                <% } else if (item.libraryType === 'spiritual' && item.spiritual?.sampradaya) { %>
+                  <i class="fas fa-om" style="font-size:.65rem;margin-right:.25rem"></i><%= item.spiritual.sampradaya %>
+                <% } %>
+              </span>
+              <a href="/elibrary/<%= item._id %>" class="btn-view">View →</a>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+
+    </div>
+
+    <!-- Pagination -->
+    <% if (totalPages > 1 && hasSearch) { %>
+      <div class="pagination">
+        <%
+          function pageUrl(p) {
+            const params = new URLSearchParams({ ...query, page: p });
+            return '/elibrary?' + params.toString();
+          }
+        %>
+        <a href="<%= pageUrl(page - 1) %>" class="pag-btn <%= page <= 1 ? 'disabled' : '' %>">‹ Prev</a>
+        <% for (let p = 1; p <= totalPages; p++) { %>
+          <% if (p === 1 || p === totalPages || (p >= page - 2 && p <= page + 2)) { %>
+            <a href="<%= pageUrl(p) %>" class="pag-btn <%= p === page ? 'active' : '' %>"><%= p %></a>
+          <% } else if (p === page - 3 || p === page + 3) { %>
+            <span class="pag-btn disabled">…</span>
+          <% } %>
+        <% } %>
+        <a href="<%= pageUrl(page + 1) %>" class="pag-btn <%= page >= totalPages ? 'disabled' : '' %>">Next ›</a>
+      </div>
+    <% } %>
+
+  </div>
+</div>
+
+<script>
+function toggleSection(head) {
+  const body = head.nextElementSibling;
+  const icon = head.querySelector('.fa-chevron-down, .fa-chevron-up');
+  body.classList.toggle('collapsed');
+  if (icon) {
+    icon.classList.toggle('fa-chevron-down');
+    icon.classList.toggle('fa-chevron-up');
+  }
+}
+
+// Show/hide spiritual or basic sections based on type tab
+const typeInput = document.querySelector('input[name="libraryType"]');
+const spiritualSections = document.querySelectorAll('#spiritualSection, #spiritualSection2, #spiritualSection3, #spiritualSection4');
+const basicSection = document.querySelector('#basicSection');
+
+function applyTypeVisibility(type) {
+  if (type === 'spiritual') {
+    spiritualSections.forEach(s => s.style.display = '');
+    if (basicSection) basicSection.style.display = 'none';
+  } else if (type === 'basic') {
+    spiritualSections.forEach(s => s.style.display = 'none');
+    if (basicSection) basicSection.style.display = '';
+  } else {
+    spiritualSections.forEach(s => s.style.display = '');
+    if (basicSection) basicSection.style.display = '';
+  }
+}
+
+const currentType = typeInput ? typeInput.value : '';
+applyTypeVisibility(currentType);
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= item.title %> – SBU Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --ink:    #1a1a2e;
+      --moss:   #2d5a27;
+      --sage:   #5a8a4a;
+      --cream:  #f5f0e8;
+      --sand:   #e8dcc8;
+      --gold:   #c8a84b;
+      --mist:   #f9f7f4;
+      --border: #ddd8cc;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--mist); color: var(--ink); }
+
+    .item-hero {
+      background: var(--moss);
+      color: #fff;
+      padding: 3rem 2rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .item-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 21px);
+    }
+    .item-hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+    .back-link { color: var(--gold); text-decoration: none; font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1.2rem; }
+    .back-link:hover { opacity: .8; }
+    .item-hero h1 { font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 900; line-height: 1.2; margin-bottom: .6rem; }
+    .item-hero .meta-row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1rem; }
+    .badge { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; padding: .25rem .65rem; border-radius: 5px; }
+    .badge-type { background: rgba(255,255,255,.15); color: #fff; }
+    .badge-fmt  { background: rgba(200,168,75,.25); color: var(--gold); }
+    .badge-avail { background: rgba(255,255,255,.1); color: rgba(255,255,255,.8); }
+
+    .item-body { max-width: 900px; margin: 2.5rem auto; padding: 0 1.5rem 4rem; display: grid; grid-template-columns: 1fr 280px; gap: 2rem; }
+    @media(max-width:768px){ .item-body { grid-template-columns: 1fr; } }
+
+    .section-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; margin-bottom: 1.25rem; }
+    .section-card h2 { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; color: var(--moss); margin-bottom: 1rem; letter-spacing: .02em; }
+    .item-description { font-size: .95rem; line-height: 1.75; color: #444; white-space: pre-wrap; }
+    .tags-row { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag-chip { font-size: .75rem; padding: .25rem .65rem; background: var(--cream); border-radius: 20px; color: #555; text-decoration: none; }
+    .tag-chip:hover { background: var(--sand); }
+
+    .meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; margin-bottom: 1.25rem; }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1rem; }
+    .stat-box { text-align: center; background: var(--cream); border-radius: 10px; padding: .75rem .5rem; }
+    .stat-box .num { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 900; color: var(--moss); }
+    .stat-box .lbl { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: #888; margin-top: .1rem; }
+
+    .btn-download { display: block; width: 100%; padding: .75rem; background: var(--moss); color: #fff; border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: .9rem; font-weight: 500; text-align: center; text-decoration: none; cursor: pointer; transition: background .2s; margin-top: .5rem; }
+    .btn-download:hover { background: var(--sage); color: #fff; }
+
+    .meta-row-item { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px solid var(--border); font-size: .85rem; }
+    .meta-row-item:last-child { border: none; }
+    .meta-label { color: #888; }
+    .meta-value { font-weight: 500; color: var(--ink); text-align: right; }
+
+    .related-list { display: flex; flex-direction: column; gap: .65rem; }
+    .related-item { display: flex; flex-direction: column; padding: .8rem; background: var(--mist); border: 1px solid var(--border); border-radius: 9px; text-decoration: none; color: var(--ink); transition: background .15s; }
+    .related-item:hover { background: var(--cream); }
+    .related-title { font-size: .85rem; font-weight: 600; line-height: 1.3; margin-bottom: .2rem; }
+    .related-meta { font-size: .72rem; color: #888; }
+  </style>
+</head>
+<body>
+
+<div class="item-hero">
+  <div class="item-hero-inner">
+    <a href="/library" class="back-link"><i class="fas fa-arrow-left"></i> Back to Library</a>
+    <h1><%= item.title %></h1>
+    <% if (item.author) { %>
+      <p style="opacity:.75;margin-top:.3rem">by <%= item.author %><% if (item.publicationYear) { %> · <%= item.publicationYear %><% } %></p>
+    <% } %>
+    <div class="meta-row">
+      <span class="badge badge-type"><%= item.documentType %></span>
+      <% if (item.fileFormat) { %><span class="badge badge-fmt"><%= item.fileFormat %></span><% } %>
+      <span class="badge badge-avail"><%= item.availability %></span>
+      <span style="opacity:.6;font-size:.8rem"><i class="fas fa-folder" style="margin-right:.3rem"></i><%= item.category %></span>
+    </div>
+  </div>
+</div>
+
+<div class="item-body">
+
+  <!-- Left: main content -->
+  <div class="item-main">
+
+    <% if (item.description) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-align-left" style="margin-right:.4rem"></i>Description</h2>
+      <p class="item-description"><%= item.description %></p>
+    </div>
+    <% } %>
+
+    <% if (item.tags && item.tags.length) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-tags" style="margin-right:.4rem"></i>Tags</h2>
+      <div class="tags-row">
+        <% item.tags.forEach(tag => { %>
+          <a href="/library?tags=<%= tag %>" class="tag-chip">#<%= tag %></a>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (related.length) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-layer-group" style="margin-right:.4rem"></i>Related Items</h2>
+      <div class="related-list">
+        <% related.forEach(r => { %>
+          <a href="/library/<%= r._id %>" class="related-item">
+            <span class="related-title"><%= r.title %></span>
+            <span class="related-meta"><%= r.documentType %><% if (r.author) { %> · <%= r.author %><% } %></span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+
+  <!-- Right: sidebar -->
+  <aside class="item-sidebar">
+
+    <div class="meta-card">
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="num"><%= item.views %></div>
+          <div class="lbl">Views</div>
+        </div>
+        <div class="stat-box">
+          <div class="num"><%= item.downloads %></div>
+          <div class="lbl">Downloads</div>
+        </div>
+      </div>
+
+      <%
+        // Determine what to show based on availability and isDownloadable
+        // RESTRICTED  → lock message only, nothing else
+        // HAS FILE    → download button only if isDownloadable=true
+        //               PDF viewer always shown (with view-only notice if not downloadable)
+      %>
+
+      <% if (item.availability === 'restricted') { %>
+
+        <div style="text-align:center;padding:.75rem;background:var(--cream);border-radius:8px;font-size:.82rem;color:#888;margin-top:.5rem">
+          <i class="fas fa-lock" style="margin-right:.3rem"></i>Restricted Access
+        </div>
+
+      <% } else if (item.fileUrl) { %>
+
+        <% if (item.isDownloadable) { %>
+          <a href="/library/<%= item._id %>/download" class="btn-download">
+            <i class="fas fa-download" style="margin-right:.4rem"></i>Download
+          </a>
+        <% } %>
+
+        <% if (item.fileFormat === 'PDF') { %>
+          <div style="margin-top:1.25rem">
+            <div style="font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:#888;margin-bottom:.5rem">
+              <i class="fas fa-eye" style="margin-right:.3rem"></i>Preview
+            </div>
+            <iframe
+              src="/library/<%= item._id %>/file"
+              style="width:100%;height:520px;border:1px solid var(--border);border-radius:10px;background:#f5f5f5"
+              type="application/pdf"
+            ></iframe>
+            <% if (!item.isDownloadable) { %>
+              <p style="font-size:.72rem;color:#aaa;margin-top:.4rem;text-align:center">
+                <i class="fas fa-lock" style="margin-right:.25rem"></i>View only — downloading is disabled
+              </p>
+            <% } %>
+          </div>
+        <% } %>
+
+      <% } %>
+
+    </div>
+
+    <!-- Meta details -->
+    <div class="meta-card">
+      <div class="meta-row-item">
+        <span class="meta-label">Category</span>
+        <span class="meta-value"><%= item.category %></span>
+      </div>
+      <div class="meta-row-item">
+        <span class="meta-label">Type</span>
+        <span class="meta-value"><%= item.documentType %></span>
+      </div>
+      <% if (item.fileFormat) { %>
+      <div class="meta-row-item">
+        <span class="meta-label">Format</span>
+        <span class="meta-value"><%= item.fileFormat %></span>
+      </div>
+      <% } %>
+      <% if (item.language) { %>
+      <div class="meta-row-item">
+        <span class="meta-label">Language</span>
+        <span class="meta-value"><%= item.language %></span>
+      </div>
+      <% } %>
+      <% if (item.publicationYear) { %>
+      <div class="meta-row-item">
+        <span class="meta-label">Year</span>
+        <span class="meta-value"><%= item.publicationYear %></span>
+      </div>
+      <% } %>
+      <div class="meta-row-item">
+        <span class="meta-label">Availability</span>
+        <span class="meta-value" style="color:<%= item.availability === 'full' ? 'var(--sage)' : item.availability === 'preview' ? 'var(--gold)' : '#c0392b' %>">
+          <%= item.availability %>
+        </span>
+      </div>
+      <div class="meta-row-item">
+        <span class="meta-label">Added</span>
+        <span class="meta-value"><%= new Date(item.createdAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></span>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>

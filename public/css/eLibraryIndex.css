@@ -1,0 +1,213 @@
+    .lib-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-add {
+        padding: .55rem 1.2rem;
+        background: #2d5a27;
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        font-size: .88rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background .2s;
+    }
+
+    .btn-add:hover {
+        background: #5a8a4a;
+    }
+
+    .search-bar {
+        margin-bottom: 1.25rem;
+    }
+
+    .search-bar input {
+        padding: .5rem .9rem;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        font-size: .88rem;
+        width: 280px;
+    }
+
+    .lib-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .88rem;
+    }
+
+    .lib-table th {
+        background: #f5f0e8;
+        padding: .7rem 1rem;
+        text-align: left;
+        font-size: .75rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: #666;
+        border-bottom: 2px solid #e8dcc8;
+    }
+
+    .lib-table td {
+        padding: .75rem 1rem;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+    .lib-table tr:hover td {
+        background: #fafafa;
+    }
+
+    .type-badge {
+        font-size: .68rem;
+        padding: .2rem .5rem;
+        border-radius: 4px;
+        font-weight: 600;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .type-badge.book {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .type-badge.journal {
+        background: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .type-badge.report {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .type-badge.blog {
+        background: #f3e5f5;
+        color: #6a1b9a;
+    }
+
+    .avail-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: .4rem;
+    }
+
+    .avail-dot.full {
+        background: #5a8a4a;
+    }
+
+    .avail-dot.preview {
+        background: #c8a84b;
+    }
+
+    .avail-dot.restricted {
+        background: #c0392b;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: .4rem;
+    }
+
+    .btn-edit {
+        padding: .3rem .7rem;
+        background: #e3f2fd;
+        color: #1565c0;
+        border: none;
+        border-radius: 5px;
+        font-size: .78rem;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-delete {
+        padding: .3rem .7rem;
+        background: #ffebee;
+        color: #c62828;
+        border: none;
+        border-radius: 5px;
+        font-size: .78rem;
+        cursor: pointer;
+    }
+
+    .btn-delete:hover {
+        background: #ffcdd2;
+    }
+
+    .btn-edit:hover {
+        background: #bbdefb;
+    }
+
+    .stat-chips {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .stat-chip {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 9px;
+        padding: .6rem 1rem;
+        font-size: .85rem;
+    }
+
+    .stat-chip strong {
+        display: block;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2d5a27;
+    }
+
+    .empty-row td {
+        text-align: center;
+        color: #aaa;
+        padding: 2rem;
+        font-style: italic;
+    }
+
+    .pagination {
+        display: flex;
+        gap: .4rem;
+        margin-top: 1.25rem;
+    }
+
+    .pag-btn {
+        padding: .35rem .75rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        color: #333;
+        font-size: .83rem;
+        text-decoration: none;
+    }
+
+    .pag-btn.active {
+        background: #2d5a27;
+        border-color: #2d5a27;
+        color: #fff;
+    }
+
+    .pag-btn.disabled {
+        opacity: .35;
+        pointer-events: none;
+    }
+
+    .truncate {
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .truncate a {
+        color : white !important;
+    }

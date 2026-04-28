@@ -1,0 +1,24 @@
+{
+  "name": "adding-features",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000s\u0000b\u0000u\u0000\r\u0000 \u0000",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "admin.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.17",
+    "cloudinary": "^1.41.3",
+    "dotenv": "^17.4.2",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.2",
+    "multer": "^2.1.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "xlsx": "^0.18.5"
+  }
+}

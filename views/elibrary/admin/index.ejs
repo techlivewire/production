@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>eLibrary Admin – SBU</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/eLibraryAdmin.css" />
+  <style>
+
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <nav>
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/elibrary" class="active">eLibrary</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header"><h1>eLibrary Manager</h1></header>
+
+    <section class="card">
+      <div class="lib-header">
+        <div>
+          <h2>All Items</h2>
+          <p style="font-size:.82rem;color:#888;margin-top:.2rem"><%= total %> total items</p>
+        </div>
+        <a href="/admin/elibrary/add" class="btn-add">+ Add New Item</a>
+      </div>
+
+      <div class="type-tabs">
+        <a href="/admin/elibrary"                   class="type-tab <%= typeFilter === ''          ? 'active' : '' %>">All</a>
+        <a href="/admin/elibrary?type=spiritual"     class="type-tab <%= typeFilter === 'spiritual' ? 'active' : '' %>">🕉️ Spiritual</a>
+        <a href="/admin/elibrary?type=basic"         class="type-tab <%= typeFilter === 'basic'     ? 'active' : '' %>">📚 Basic/Academic</a>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table class="eli-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Author</th>
+              <th>Format</th>
+              <th>Availability</th>
+              <th>Views</th>
+              <th>Featured</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (items.length === 0) { %>
+              <tr class="empty-row"><td colspan="9">No items yet. <a href="/admin/elibrary/add">Add one →</a></td></tr>
+            <% } %>
+            <% items.forEach(item => { %>
+            <tr>
+              <td>
+                <div class="truncate" title="<%= item.title %>">
+                  <a href="/elibrary/<%= item._id %>" target="_blank" style="color:#ffffff;text-decoration:none;font-weight:500"><%= item.title %></a>
+                </div>
+              </td>
+              <td>
+                <span class="badge badge-<%= item.libraryType %>"><%= item.libraryType %></span>
+              </td>
+              <td><%= item.author || '—' %></td>
+              <td><%= item.fileFormat || '—' %></td>
+              <td><span class="avail-dot <%= item.availability %>"></span><%= item.availability %></td>
+              <td><%= item.views %></td>
+              <td><% if (item.isFeatured) { %><span class="star">⭐</span><% } else { %>—<% } %></td>
+              <td><%= new Date(item.createdAt).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) %></td>
+              <td>
+                <div class="action-btns">
+                  <a href="/admin/elibrary/edit/<%= item._id %>" class="btn-edit">Edit</a>
+                  <form method="POST" action="/admin/elibrary/delete/<%= item._id %>" onsubmit="return confirm('Delete this item?')">
+                    <button type="submit" class="btn-delete">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <% if (totalPages > 1) { %>
+        <div class="pagination">
+          <a href="?page=<%= page-1 %><%= typeFilter ? '&type='+typeFilter : '' %>" class="pag-btn <%= page<=1?'disabled':'' %>">‹</a>
+          <% for(let p=1;p<=totalPages;p++){ %>
+            <a href="?page=<%= p %><%= typeFilter ? '&type='+typeFilter : '' %>" class="pag-btn <%= p===page?'active':'' %>"><%= p %></a>
+          <% } %>
+          <a href="?page=<%= page+1 %><%= typeFilter ? '&type='+typeFilter : '' %>" class="pag-btn <%= page>=totalPages?'disabled':'' %>">›</a>
+        </div>
+      <% } %>
+    </section>
+  </main>
+</div>
+</body>
+</html>

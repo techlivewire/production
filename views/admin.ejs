@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- <link rel="stylesheet" href="/css/style.css" /> -->
+  <link rel="stylesheet" href="/css/style.css"  />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Admin Panel</h2>
+    <nav>
+  <a class="active">Dashboard</a>
+
+  <!-- <a href="/admin/library">Library</a> -->
+   <a href="/admin/elibrary">eLibrary</a>
+</nav>
+    </aside>
+
+
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- Header -->
+      <header class="header">
+        <h1>Event Dashboard</h1>
+      </header>
+
+      <!-- Add Event -->
+      <section class="card">
+        <h2>Add New Event</h2>
+
+        <form id="eventForm" method = "post" action = "addEvent" >
+          <div class="grid">
+<input type="text" name="title" placeholder="Event Title" required />
+<input type="text" name="artists" placeholder="Artists / Acts" required />
+<input type="date" name="date" required />
+<input type="time" name="time" required />
+<input type="text" name="location" placeholder="Location" required />
+
+          </div>
+
+          <button type="submit">Add Event</button>
+        </form>
+      </section>
+
+      <!-- Events List -->
+      <section class="card">
+        <h2>All Events</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Event</th>
+              <th>Artists</th>
+              <th>Location</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <!-- <tbody id="eventTable"></tbody> -->
+           <tbody>
+  <% if (events.length === 0) { %>
+    <tr>
+      <td colspan="5">No events found</td>
+    </tr>
+  <% } %>
+
+  <% events.forEach(event => { %>
+<tr>
+  <td>
+    <%= event.date.toDateString() %><br>
+    <small><%= event.time %></small>
+  </td>
+  <td><%= event.title %></td>
+  <td><%= event.artists %></td>
+  <td><%= event.location %></td>
+
+  <td>
+  <!-- Edit Button -->
+  <a href="/editEvent/<%= event._id %>">
+    <button type="button">Edit</button>
+  </a>
+
+  <!-- Delete Button -->
+  <form method="POST" action="/deleteEvent/<%= event._id %>">
+    <button type="submit">Delete</button>
+  </form>
+</td>
+</tr>
+
+  <% }) %>
+</tbody>
+
+        </table>
+      </section>
+
+      <div class="card">
+  <h2>Public Site Theme</h2>
+<form action="/updateColor" method ="POST">
+    <div class="grid">
+          
+    
+    <h4>Choose primary color</h4>
+    <input type="color" id="primary" title="Primary color" name = "primary">
+     <h4>Choose secondry color</h4>
+    <input type="color" id="secondary" title="Secondary color" name = "secondary">
+     <h4>Choose other color</h4>
+    <input type="color" id="other" title="Other color" name = "other">
+  </div>
+
+
+
+  <!-- <button onclick="updatePublicTheme()">Update Public Theme</button> -->
+  <button type ="submit" >Update Public Theme</button>
+  </form>
+
+</div>
+
+
+
+
+      <div class="card">
+  <h2>Public Site Title</h2>
+<form action="/updateTitle" method ="POST">
+    <div class="grid">
+          
+    
+    <h3>Hero Title</h3>
+    <input type="text" id="title" title="Primary color" name = "title" placeholder="Hero-Title">
+     <h3>Hero Sub Title </h3>
+    <input type="text" id="subTitle"  name = "subTitle" placeholder="Hero-Sub-Title">
+    <h3>Hero Eyebrow</h3>
+    <input type="text" name="heroEyebrow" placeholder="Hero Eyebrow Text" />
+    <h3>Hero URL</h3>
+    <input type="text" name="heroUrl" placeholder="Hero URL (e.g. www.example.com)" />
+
+  </div>
+
+
+
+  <!-- <button onclick="updatePublicTheme()">Update Public Theme</button> -->
+  <button type ="submit" >Update Page Title</button>
+  </form>
+
+</div>
+
+<div class="card">
+  <h2>Update Logo</h2>
+
+  <form action="/updateLogo" method="POST">
+    <div class="grid">
+
+      <input type="text" name="logoMark" placeholder="Logo Mark (e.g. SBU)" />
+      <input type="text" name="logoTextTop" placeholder="Top Text" />
+      <input type="text" name="logoTextBottom" placeholder="Bottom Text" />
+
+    </div>
+
+    <button type="submit">Update Logo</button>
+  </form>
+</div>
+<div class="card">
+  <h2>Col Card Section</h2>
+
+
+<form action="/updateColCard" method="POST" enctype="multipart/form-data">
+  <div class="grid">
+
+    <input type="text" name="label" placeholder="Label" required />
+    <input type="text" name="heading" placeholder="Heading" required />
+    <input type="text" name="description" placeholder="Description" required />
+
+    <input type="file" name="images" multiple accept="image/*" />
+
+  </div>
+
+  <button type="submit">Update Section</button>
+</form>
+</div>
+<div class="card">
+  <h2>Update Video</h2>
+
+  <form action="/updateVideo" method="POST">
+    <input type="text" name="videoUrl" placeholder="Paste YouTube embed URL" />
+    <button type="submit">Update Video</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Update About Section</h2>
+
+ <form action="/updateAbout" method="POST" enctype="multipart/form-data">
+  <div class="grid">
+
+    <input type="text" name="title" placeholder="About Title" required />
+    <input type="text" name="description" placeholder="About Description" required />
+
+    <input type="file" name="images" multiple accept="image/*" />
+
+  </div>
+
+  <button type="submit">Update About</button>
+</form>
+</div>
+
+<div class="card">
+  <h2>Manage Pages</h2>
+
+  <form action="/updatePage" method="POST">
+    
+    <select name="name">
+      <option value="privacy">Privacy Policy</option>
+      <option value="terms">Terms & Conditions</option>
+    </select>
+
+    <textarea name="content" rows="8" placeholder="Enter page content..." required></textarea>
+
+    <button type="submit">Save</button>
+
+  </form>
+</div>
+
+
+
+    </main>
+  </div>
+
+
+  
+</body>
+</html>

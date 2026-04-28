@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= page.name %> | Sustainable Business Union</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- <link rel="stylesheet" href="/css/style.css"> -->
+  <link rel="stylesheet" href="/css/style.css" >
+  "/css/style.css" 
+</head>
+<body>
+
+  <div class="policy-page">
+
+    <div class="policy-container">
+
+      <h1 class="policy-title">
+        <%= page.name === "privacy" ? "Privacy Policy" : "Terms & Conditions" %>
+      </h1>
+
+      <p class="policy-updated">
+        Last updated: <%= new Date().toDateString() %>
+      </p>
+
+      <div class="policy-content">
+        <%- page.content %>  <!-- allows rich HTML -->
+      </div>
+      <a href="/" class="back-link">← Back to Home</a>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= item.title %> – eLibrary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --saffron: #e8701a; --deep: #1c1430; --gold: #d4a017;
+      --sage: #2e7d32; --lotus: #c0392b; --mist: #faf8f4;
+      --cream: #f5f0e8; --sand: #ede5d4; --border: #ddd5c0;
+      --ink: #2c2416; --muted: #7a6e5f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--mist); color: var(--ink); }
+
+    .hero { background: linear-gradient(135deg, var(--deep), #2d1f4e); color: #fff; padding: 3rem 2rem 2.5rem; position: relative; overflow: hidden; }
+    .hero::before { content: '<%= item.libraryType === "spiritual" ? "🕉" : "📚" %>'; position: absolute; right: 3rem; top: 50%; transform: translateY(-50%); font-size: 7rem; opacity: .07; pointer-events: none; }
+    .hero-inner { max-width: 960px; margin: 0 auto; position: relative; }
+    .back-link { color: var(--gold); text-decoration: none; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1rem; opacity: .85; }
+    .back-link:hover { opacity: 1; }
+    .hero h1 { font-family: 'Crimson Pro', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 600; line-height: 1.2; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; align-items: center; }
+    .badge { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; padding: .22rem .6rem; border-radius: 4px; }
+    .badge-spiritual { background: rgba(232,112,26,.25); color: #f4a85a; }
+    .badge-basic     { background: rgba(46,125,50,.2); color: #81c784; }
+    .badge-neutral   { background: rgba(255,255,255,.12); color: rgba(255,255,255,.8); }
+    .badge-gold      { background: rgba(212,160,23,.2); color: var(--gold); }
+
+    .body-grid { max-width: 960px; margin: 2rem auto; padding: 0 1.5rem 4rem; display: grid; grid-template-columns: 1fr 270px; gap: 2rem; }
+    @media(max-width:768px){ .body-grid { grid-template-columns: 1fr; } }
+
+    .section-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.6rem; margin-bottom: 1.25rem; }
+    .section-card h2 { font-family: 'Crimson Pro', serif; font-size: 1rem; font-weight: 600; color: var(--deep); margin-bottom: 1rem; display: flex; align-items: center; gap: .4rem; }
+    .desc-text { font-size: .93rem; line-height: 1.8; color: #444; white-space: pre-wrap; }
+
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .meta-pair { background: var(--cream); border-radius: 8px; padding: .6rem .8rem; }
+    .meta-pair .lbl { font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .15rem; }
+    .meta-pair .val { font-size: .85rem; font-weight: 500; color: var(--ink); }
+
+    .tags-row { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .tag-chip { font-size: .75rem; padding: .25rem .6rem; background: var(--cream); border-radius: 20px; color: var(--muted); text-decoration: none; }
+    .tag-chip:hover { background: var(--sand); }
+
+    .related-list { display: flex; flex-direction: column; gap: .6rem; }
+    .related-item { padding: .75rem; background: var(--mist); border: 1px solid var(--border); border-radius: 9px; text-decoration: none; color: var(--ink); transition: background .15s; display: block; }
+    .related-item:hover { background: var(--cream); }
+    .related-title { font-size: .85rem; font-weight: 600; line-height: 1.3; margin-bottom: .15rem; }
+    .related-meta  { font-size: .72rem; color: var(--muted); }
+
+    /* Sidebar */
+    .meta-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; margin-bottom: .85rem; }
+    .stat-box { text-align: center; background: var(--cream); border-radius: 10px; padding: .7rem .5rem; }
+    .stat-box .num { font-family: 'Crimson Pro', serif; font-size: 1.5rem; font-weight: 600; color: var(--deep); }
+    .stat-box .lbl { font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: .1rem; }
+
+    .btn-dl { display: block; width: 100%; padding: .7rem; background: var(--saffron); color: #fff; border: none; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: .88rem; font-weight: 600; text-align: center; text-decoration: none; cursor: pointer; transition: background .2s; margin-top: .5rem; }
+    .btn-dl:hover { background: #c85e14; color: #fff; }
+    .restricted-msg { text-align: center; padding: .7rem; background: var(--cream); border-radius: 8px; font-size: .8rem; color: var(--muted); margin-top: .5rem; }
+
+    .detail-row { display: flex; justify-content: space-between; padding: .55rem 0; border-bottom: 1px solid var(--border); font-size: .83rem; }
+    .detail-row:last-child { border: none; }
+    .dl { color: var(--muted); }
+    .dv { font-weight: 500; text-align: right; max-width: 60%; }
+
+    .pdf-viewer { margin-top: 1.25rem; }
+    .pdf-label { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; display: flex; align-items: center; gap: .3rem; }
+    .pdf-frame { width: 100%; height: 500px; border: 1px solid var(--border); border-radius: 10px; background: #f0f0f0; }
+    .pdf-notice { font-size: .7rem; color: #aaa; margin-top: .35rem; text-align: center; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <a href="/elibrary" class="back-link"><i class="fas fa-arrow-left"></i> Back to eLibrary</a>
+    <h1><%= item.title %></h1>
+    <% if (item.author) { %>
+      <p style="opacity:.65;margin-top:.35rem;font-size:.92rem">by <%= item.author %><% if (item.publicationYear) { %> · <%= item.publicationYear %><% } %></p>
+    <% } %>
+    <div class="badge-row">
+      <span class="badge badge-<%= item.libraryType %>"><%= item.libraryType %></span>
+      <% if (item.fileFormat) { %><span class="badge badge-gold"><%= item.fileFormat %></span><% } %>
+      <span class="badge badge-neutral"><%= item.availability %></span>
+      <% if (item.readingLevel) { %><span class="badge badge-neutral"><%= item.readingLevel %></span><% } %>
+      <% if (item.isFeatured) { %><span class="badge badge-gold">⭐ Featured</span><% } %>
+      <% if (item.language) { %><span style="opacity:.55;font-size:.78rem"><i class="fas fa-globe" style="margin-right:.25rem"></i><%= item.language %></span><% } %>
+    </div>
+  </div>
+</div>
+
+<div class="body-grid">
+
+  <!-- Left -->
+  <div>
+
+    <% if (item.description) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-align-left"></i> Description</h2>
+      <p class="desc-text"><%= item.description %></p>
+    </div>
+    <% } %>
+
+    <!-- Spiritual metadata -->
+    <% if (item.libraryType === 'spiritual') { %>
+    <% const s = item.spiritual || {}; %>
+    <% const spiritualFields = [['Scripture', s.scriptureName], ['Section', s.section], ['Shloka/Verse', s.shloka], ['Darshana', s.darshana], ['Sampradaya', s.sampradaya], ['Commentary By', s.commentaryBy], ['Practice', s.practiceType], ['Deity', s.deity], ['Concept', s.spiritualConcept], ['Yuga', s.yuga], ['Period', s.historicalPeriod], ['Audience', s.audience], ['Lifestyle', s.lifestyle], ['Translation', s.translationType]].filter(([,v]) => v); %>
+    <% if (spiritualFields.length) { %>
+    <div class="section-card">
+      <h2>🕉️ Spiritual Details</h2>
+      <div class="meta-grid">
+        <% spiritualFields.forEach(([label, val]) => { %>
+          <div class="meta-pair">
+            <div class="lbl"><%= label %></div>
+            <div class="val"><%= val %></div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+    <% } %>
+
+    <!-- Academic metadata -->
+    <% if (item.libraryType === 'basic') { %>
+    <% const b = item.basic || {}; %>
+    <% const basicFields = [['Category', b.category], ['Type', b.documentType], ['Publisher', b.publisher], ['Institution', b.institution], ['Course', b.course], ['Peer-reviewed', b.isPeerReviewed ? 'Yes' : null]].filter(([,v]) => v); %>
+    <% if (basicFields.length) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-university"></i> Academic Details</h2>
+      <div class="meta-grid">
+        <% basicFields.forEach(([label, val]) => { %>
+          <div class="meta-pair">
+            <div class="lbl"><%= label %></div>
+            <div class="val"><%= val %></div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+    <% } %>
+
+    <% if (item.tags && item.tags.length) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-tags"></i> Tags</h2>
+      <div class="tags-row">
+        <% item.tags.forEach(tag => { %>
+          <a href="/elibrary?tags=<%= tag %><%= item.libraryType ? '&libraryType=' + item.libraryType : '' %>" class="tag-chip">#<%= tag %></a>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (related.length) { %>
+    <div class="section-card">
+      <h2><i class="fas fa-layer-group"></i> Related Items</h2>
+      <div class="related-list">
+        <% related.forEach(r => { %>
+          <a href="/elibrary/<%= r._id %>" class="related-item">
+            <div class="related-title"><%= r.title %></div>
+            <div class="related-meta"><%= r.libraryType %><% if (r.author) { %> · <%= r.author %><% } %></div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+
+  <!-- Right sidebar -->
+  <aside>
+
+    <div class="meta-card">
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="num"><%= item.views %></div>
+          <div class="lbl">Views</div>
+        </div>
+        <div class="stat-box">
+          <div class="num"><%= item.downloads %></div>
+          <div class="lbl">Downloads</div>
+        </div>
+      </div>
+
+      <% if (item.availability === 'restricted') { %>
+        <div class="restricted-msg"><i class="fas fa-lock" style="margin-right:.3rem"></i>Restricted Access</div>
+
+      <% } else if (item.fileUrl) { %>
+
+        <% if (item.isDownloadable) { %>
+          <a href="/elibrary/<%= item._id %>/download" class="btn-dl">
+            <i class="fas fa-download" style="margin-right:.4rem"></i>Download
+          </a>
+        <% } %>
+
+        <% if (item.fileFormat === 'PDF') { %>
+          <div class="pdf-viewer">
+            <div class="pdf-label"><i class="fas fa-eye"></i> Preview</div>
+            <iframe src="/elibrary/<%= item._id %>/file" class="pdf-frame" type="application/pdf"></iframe>
+            <% if (!item.isDownloadable) { %>
+              <p class="pdf-notice"><i class="fas fa-lock" style="margin-right:.25rem"></i>View only — downloading disabled</p>
+            <% } %>
+          </div>
+        <% } %>
+
+      <% } %>
+    </div>
+
+    <div class="meta-card">
+      <div class="detail-row"><span class="dl">Type</span><span class="dv"><%= item.libraryType %></span></div>
+      <% if (item.fileFormat) { %>
+      <div class="detail-row"><span class="dl">Format</span><span class="dv"><%= item.fileFormat %></span></div>
+      <% } %>
+      <% if (item.language) { %>
+      <div class="detail-row"><span class="dl">Language</span><span class="dv"><%= item.language %></span></div>
+      <% } %>
+      <% if (item.publicationYear) { %>
+      <div class="detail-row"><span class="dl">Year</span><span class="dv"><%= item.publicationYear %></span></div>
+      <% } %>
+      <% if (item.readingLevel) { %>
+      <div class="detail-row"><span class="dl">Level</span><span class="dv"><%= item.readingLevel %></span></div>
+      <% } %>
+      <div class="detail-row">
+        <span class="dl">Availability</span>
+        <span class="dv" style="color:<%= item.availability === 'full' ? 'var(--sage)' : item.availability === 'preview' ? 'var(--gold)' : 'var(--lotus)' %>">
+          <%= item.availability %>
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="dl">Added</span>
+        <span class="dv"><%= new Date(item.createdAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></span>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Library Item – SBU Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media(max-width:680px){ .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: .35rem; }
+    .form-group.full { grid-column: 1/-1; }
+    .form-group label { font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; color: #888; font-weight: 500; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: .6rem .85rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: .9rem;
+      font-family: inherit;
+      color: #1a1a2e;
+      transition: border-color .2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #2d5a27;
+    }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .required-star { color: #c0392b; margin-left: .15rem; }
+    .checkbox-row { display: flex; align-items: center; gap: .5rem; font-size: .9rem; margin-top: .5rem; }
+    .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+    .error-box { background: #ffebee; border: 1px solid #ffcdd2; border-radius: 8px; padding: .75rem 1rem; font-size: .85rem; color: #c62828; margin-bottom: 1.25rem; }
+    .form-hint { font-size: .75rem; color: #aaa; margin-top: .15rem; }
+    .btn-submit { padding: .65rem 1.5rem; background: #2d5a27; color: #fff; border: none; border-radius: 8px; font-size: .92rem; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn-submit:hover { background: #5a8a4a; }
+    .btn-cancel { padding: .65rem 1rem; background: transparent; color: #666; border: 1px solid #ddd; border-radius: 8px; font-size: .88rem; cursor: pointer; text-decoration: none; margin-left: .5rem; }
+    .btn-cancel:hover { background: #f5f5f5; }
+    .breadcrumb { font-size: .8rem; color: #888; margin-bottom: .75rem; }
+    .breadcrumb a { color: #2d5a27; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <nav>
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/library" class="active">Library</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h1>Add Library Item</h1>
+    </header>
+
+    <section class="card">
+      <p class="breadcrumb"><a href="/admin">Admin</a> › <a href="/admin/library">Library</a> › Add New</p>
+      <h2 style="margin-bottom:1.25rem">New Item Details</h2>
+
+      <% if (error) { %>
+        <div class="error-box"><strong>Error:</strong> <%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/library/add" enctype="multipart/form-data">
+        <div class="form-grid">
+
+          <div class="form-group full">
+            <label>Title <span class="required-star">*</span></label>
+            <input type="text" name="title" value="<%= values.title || '' %>" placeholder="Publication title" required>
+          </div>
+
+          <div class="form-group">
+            <label>Author</label>
+            <input type="text" name="author" value="<%= values.author || '' %>" placeholder="Author / Organization">
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <input type="text" name="category" value="<%= values.category || '' %>" placeholder="e.g. Technology, Environment">
+          </div>
+
+          <div class="form-group full">
+            <label>Description</label>
+            <textarea name="description" placeholder="Brief description of the content…"><%= values.description || '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Tags</label>
+            <input type="text" name="tags" value="<%= values.tags || '' %>" placeholder="sustainability, green, policy">
+            <span class="form-hint">Comma separated</span>
+          </div>
+
+          <div class="form-group">
+            <label>Publication Year</label>
+            <input type="number" name="publicationYear" value="<%= values.publicationYear || '' %>" placeholder="<%= new Date().getFullYear() %>" min="1900" max="<%= new Date().getFullYear() + 1 %>">
+          </div>
+
+          <div class="form-group">
+            <label>Language</label>
+            <input type="text" name="language" value="<%= values.language || 'English' %>" placeholder="English">
+          </div>
+
+          <div class="form-group">
+            <label>Document Type</label>
+            <select name="documentType">
+              <option value="blog"    <%= values.documentType === 'blog'    ? 'selected' : '' %>>Blog</option>
+              <option value="book"    <%= values.documentType === 'book'    ? 'selected' : '' %>>Book</option>
+              <option value="journal" <%= values.documentType === 'journal' ? 'selected' : '' %>>Journal</option>
+              <option value="report"  <%= values.documentType === 'report'  ? 'selected' : '' %>>Report</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>File Format</label>
+            <select name="fileFormat">
+              <option value="">— Select —</option>
+              <option value="PDF"  <%= values.fileFormat === 'PDF'  ? 'selected' : '' %>>PDF</option>
+              <option value="EPUB" <%= values.fileFormat === 'EPUB' ? 'selected' : '' %>>EPUB</option>
+              <option value="DOC"  <%= values.fileFormat === 'DOC'  ? 'selected' : '' %>>DOC</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Availability</label>
+            <select name="availability">
+              <option value="full"       <%= values.availability === 'full'       ? 'selected' : '' %>>Full Access</option>
+              <option value="preview"    <%= values.availability === 'preview'    ? 'selected' : '' %>>Preview Only</option>
+              <option value="restricted" <%= values.availability === 'restricted' ? 'selected' : '' %>>Restricted</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label>Upload File</label>
+            <input type="file" name="file" accept=".pdf,.epub,.doc,.docx">
+            <span class="form-hint">Or provide an external URL below</span>
+          </div>
+
+          <div class="form-group full">
+            <label>External File URL (optional)</label>
+            <input type="text" name="fileUrl" value="<%= values.fileUrl || '' %>" placeholder="https://example.com/document.pdf">
+            <span class="form-hint">Used if no file is uploaded above</span>
+          </div>
+
+          <div class="form-group full">
+            <div class="checkbox-row">
+              <input type="checkbox" name="isDownloadable" id="isDownloadable" <%= values.isDownloadable ? 'checked' : '' %>>
+              <label for="isDownloadable" style="text-transform:none;letter-spacing:0;font-size:.9rem;color:#333;">Allow users to download this file</label>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="margin-top:1.5rem;display:flex;align-items:center">
+          <button type="submit" class="btn-submit">Save Item</button>
+          <a href="/admin/library" class="btn-cancel">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+</body>
+</html>

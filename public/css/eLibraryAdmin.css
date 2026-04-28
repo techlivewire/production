@@ -1,0 +1,201 @@
+    .lib-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-add {
+        padding: .55rem 1.2rem;
+        background: #1c1430;
+        color: #fff;
+        border: none;
+        border-radius: 7px;
+        font-size: .88rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background .2s;
+    }
+
+    .btn-add:hover {
+        background: #e8701a;
+    }
+
+    .type-tabs {
+        display: flex;
+        gap: .4rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .type-tab {
+        padding: .4rem .9rem;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: .82rem;
+        text-decoration: none;
+        color: #555;
+        transition: all .15s;
+        background: #fff;
+    }
+
+    .type-tab.active,
+    .type-tab:hover {
+        background: #1c1430;
+        color: #fff;
+        border-color: #1c1430;
+    }
+
+    .eli-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .86rem;
+    }
+
+    .eli-table th {
+        background: #f5f0e8;
+        padding: .65rem 1rem;
+        text-align: left;
+        font-size: .72rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: #666;
+        border-bottom: 2px solid #e8dcc8;
+    }
+
+    .eli-table td {
+        padding: .7rem 1rem;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+    .eli-table tr:hover td {
+        /* background: #fafafa; */
+    }
+
+    .badge {
+        font-size: .65rem;
+        padding: .18rem .5rem;
+        border-radius: 4px;
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .badge-spiritual {
+        background: #fef3e2;
+        color: #e67e22;
+    }
+
+    .badge-basic {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .badge-type {
+        background: #f5f0e8;
+        color: #7a6e5f;
+    }
+
+    .avail-dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-right: .35rem;
+    }
+
+    .avail-dot.full {
+        background: #2e7d32;
+    }
+
+    .avail-dot.preview {
+        background: #d4a017;
+    }
+
+    .avail-dot.restricted {
+        background: #c0392b;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: .4rem;
+    }
+
+    .btn-edit {
+        padding: .28rem .65rem;
+        background: #e3f2fd;
+        color: #1565c0;
+        border: none;
+        border-radius: 5px;
+        font-size: .76rem;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-delete {
+        padding: .28rem .65rem;
+        background: #ffebee;
+        color: #c62828;
+        border: none;
+        border-radius: 5px;
+        font-size: .76rem;
+        cursor: pointer;
+    }
+
+    .btn-edit:hover {
+        background: #bbdefb;
+    }
+
+    .btn-delete:hover {
+        background: #ffcdd2;
+    }
+
+    .empty-row td {
+        text-align: center;
+        color: #aaa;
+        padding: 2rem;
+        font-style: italic;
+    }
+
+    .pagination {
+        display: flex;
+        gap: .4rem;
+        margin-top: 1.25rem;
+    }
+
+    .pag-btn {
+        padding: .35rem .75rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        color: #333;
+        font-size: .83rem;
+        text-decoration: none;
+    }
+
+    .pag-btn.active {
+        background: #1c1430;
+        border-color: #1c1430;
+        color: #fff;
+    }
+
+    .pag-btn.disabled {
+        opacity: .35;
+        pointer-events: none;
+    }
+
+    .truncate {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .star {
+        color: #d4a017;
+        font-size: .8rem;
+    }

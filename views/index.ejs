@@ -1,0 +1,508 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sustainable Business Union – Green Tech Revolution</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-Sn/e8bNG0Ax7Anxr1j403rwhhtjfiPgk41IrT9jp+1rssZCvGSqtEtFPi0PfrxGX2YeliYg+6TSGT+bVfVd4Yw=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+    <style>
+  :root {
+    --primary: <%= colors.primary %>;
+
+    --secondary: <%= colors.secondary %>;
+    --other: <%= colors.other %>;
+  }
+</style>
+
+
+
+    <link rel="stylesheet" href="/css/SBU.css">
+  
+    <link rel="stylesheet" href="/css/style.css" >
+    <link rel="stylesheet" href="/css/navbar.css" >
+
+  </head>
+  <body>
+    <div class="page">
+
+      <!-- NAVBAR -->
+       <header class="navbar" id="mainNavbar">
+  <div class="navbar-inner">
+
+    <!-- Logo -->
+    <a href="/" class="nav-logo">
+      <div class="logo-mark"><%= logo.logoMark %></div>
+      <div class="logo-text">
+        <span><%= logo.logoTextTop %></span>
+        <span><%= logo.logoTextBottom %></span>
+      </div>
+    </a>
+
+    <!-- Desktop links -->
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#info">Info</a></li>
+      <li><a href="#events">Events</a></li>
+      <!-- <li><a href="/library">Library</a></li> -->
+      <a href="/elibrary">eLibrary</a>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+
+    <!-- Desktop CTA -->
+    <a href="#events" class="nav-cta">Get Tickets</a>
+
+    <!-- Hamburger (mobile only) -->
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+
+  </div>
+</header>
+
+<!-- Mobile drawer — immediately after </header>, outside it -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-inner">
+    <a href="#home">Home</a>
+    <a href="#info">Info</a>
+    <a href="#events">Events</a>
+    <!-- <a href="/library">Library</a> -->
+    <a href="/elibrary">eLibrary</a>
+    <a href="/contact">Contact</a>
+    <a href="#events" class="drawer-cta">Get Tickets</a>
+  </div>
+</div>
+
+  
+
+      <!-- HERO -->
+      <section id="home" class="hero">
+        <div class="hero-inner">
+          <div>
+            <!-- <div class="hero-eyebrow">Renewable Energy</div> -->
+             <div class="hero-eyebrow">
+  <%= titles.heroEyebrow %>
+</div>
+            <!-- <div class="hero-title-main">GREEN TECH<br>REVOLUTION</div> -->
+            <div class="hero-title-main"> <%= titles.title %> </div>
+            <!-- <div class="hero-subtitle">sustainable<br/>business union</div> -->
+            <div class="hero-subtitle"><%= titles.subTitle %> </div>
+        
+            <div class="hero-url">
+              <a href="{{<%= titles.heroUrl %>}"> <%= titles.heroUrl %></a>
+  
+</div>
+
+          </div>
+
+          <div class="hero-right">
+            <div class="hero-card">
+              <div class="hero-card-inner">
+                <div class="hex"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UPCOMING EVENTS -->
+    <section id="events" class="section section-gray">
+  <div class="wrapper">
+    <div class="two-column">
+
+      <!-- LEFT: COL CARD -->
+      <div class="col-card">
+
+        <div class="col-header">
+          <div class="megaphone-icon">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+
+          <span class="label-pill">
+            <%= colCard?.label || "Circular Economy" %>
+          </span>
+        </div>
+
+        <h2 class="col-heading">
+          <%= colCard?.heading || "WHO'S COMING TO TOWN?" %>
+        </h2>
+
+        <p class="col-description">
+          <%= colCard?.description || "Stay updated with our latest events" %>
+        </p>
+
+        <!-- IMAGE / CAROUSEL -->
+        <div class="col-card-illustration">
+
+          <% if (colCard?.images && colCard.images.length > 0) { %>
+
+            <div id="colCardCarousel" class="carousel slide">
+
+              <div class="carousel-inner">
+
+                <% colCard.images.forEach((img, index) => { %>
+                  <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                    <img src="<%= img %>" alt="col-card image" class="col-img">
+                  </div>
+                <% }) %>
+
+              </div>
+
+              <% if (colCard.images.length > 1) { %>
+                <button class="carousel-control-prev" type="button" data-bs-target="#colCardCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon custom-arrow"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#colCardCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon custom-arrow"></span>
+                </button>
+              <% } %>
+
+            </div>
+
+          <% } else { %>
+
+            <div class="placeholder">
+              No image available
+            </div>
+
+          <% } %>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT: EVENTS PANEL -->
+      <div class="events-panel">
+
+        <div class="events-header">
+          <h3>Upcoming Acts</h3>
+          <span class="events-sub">WHO'S COMING TO TOWN?</span>
+        </div>
+
+        <div class="events-list">
+
+          <% if (!events || events.length === 0) { %>
+
+            <div class="empty-state">
+              No upcoming events
+            </div>
+
+          <% } else { %>
+
+            <% events.forEach(event => { %>
+
+              <div class="event-row">
+
+                <div class="event-info">
+
+                  <div class="event-date">
+                    <%= event.date.toDateString() %> • <%= event.time %>
+                  </div>
+
+                  <div class="event-title">
+                    <%= event.title %>
+                  </div>
+
+                  <div class="event-meta">
+                    <span><strong>Speakers:</strong> <%= event.artists %></span>
+                    <span><strong>Location:</strong> <%= event.location %></span>
+                  </div>
+
+                </div>
+
+                <button class="btn-light" style="color:black">Buy Tickets</button>
+
+              </div>
+
+            <% }) %>
+
+          <% } %>
+
+        </div>
+
+        <button class="btn-light btn-block" style = "color:black">See All Events</button>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+      <!-- VIDEO -->
+      <section class="video-section" id="info">
+        <div class="video-frame">
+          <!-- <div class="video-placeholder">
+            Video Placeholder (YouTube embed here)
+          </div> -->
+          <div class="video-placeholder">
+  <% if (video?.videoUrl) { %>
+    <iframe 
+      width="100%" 
+      height="100%" 
+      src="<%= video.videoUrl %>" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+  <% } else { %>
+    <p>No video available</p>
+  <% } %>
+</div>
+        </div>
+      </section>
+
+      <!-- ABOUT / GREEN CONSORTIUM -->
+<section class="about-section">
+  <div class="wrapper">
+    <div class="about-grid">
+
+      <!-- LEFT: CAROUSEL -->
+      <div class="about-photo">
+
+        <% if (about?.images && about.images.length > 0) { %>
+
+          <div id="aboutCarousel" class="carousel slide">
+
+            <div class="carousel-inner">
+
+              <% about.images.forEach((img, index) => { %>
+                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                  <img src="<%= img %>" 
+                       class="d-block w-100"
+                       style="height:260px; object-fit:cover;">
+                </div>
+              <% }) %>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+
+          </div>
+
+        <% } else { %>
+
+          <div class="placeholder">No images available</div>
+
+        <% } %>
+
+      </div>
+
+      <!-- RIGHT: TEXT -->
+      <div class="about-card">
+        <h3><%= about?.title || "ABOUT US" %></h3>
+        <p><%= about?.description || "No description available" %></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+      <!-- THE DEAL -->
+      <section class="deal-section">
+        <div class="deal-inner">
+          <div class="deal-header">
+            <div class="deal-megaphone">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div class="deal-label">Circular Economy</div>
+            <div class="deal-pills">
+              <span class="deal-pill">Everything you need</span>
+              <span class="deal-pill">To know</span>
+            </div>
+            <h2 class="deal-title">The Deal</h2>
+          </div>
+
+          <div class="deal-grid">
+            <div class="deal-card">
+              <h4>Expert Guidance</h4>
+              <p>
+                Sustainable Business Union – a collaborative platform helping
+                businesses adopt future-ready, environmentally responsible, and
+                profitable sustainability solutions.
+              </p>
+            </div>
+            <div class="deal-card">
+              <h4>Innovative Strategies</h4>
+              <p>
+                From circular economy models to climate-aligned roadmaps, we
+                help
+                you design strategies that work in the real world.
+              </p>
+            </div>
+            <div class="deal-card">
+              <h4>Industry Network</h4>
+              <p>
+                Connect with partners, experts, and peers driving sustainability
+                across sectors and geographies.
+              </p>
+            </div>
+            <div class="deal-card">
+              <h4>Impact Approach</h4>
+              <p>
+                Data-driven frameworks that measure environmental and business
+                impact so you can scale what works.
+              </p>
+            </div>
+          </div>
+
+          <button class="btn-ghost">Apply to be subject matter expert</button>
+        </div>
+      </section>
+
+      <!-- TOPICS + WHY CHOOSE US + NEWSLETTER + CONTACT -->
+      <section class="topics-section" id="contact">
+        <div class="topics-inner">
+
+          <div class="topics-grid">
+            <div class="topics-cards">
+              <div class="topics-label">Circular Economy</div>
+              <h3 class="topics-heading">Everything you need to explore</h3>
+
+              <div class="topics-columns">
+                <div class="topic-card">
+                  <h5>Earth (Land &amp; Soil)</h5>
+                  <p>
+                    Unsustainable use is leading to deforestation,
+                    desertification, and food insecurity.
+                  </p>
+                  <span>Explore</span>
+                </div>
+                <div class="topic-card">
+                  <h5>Water</h5>
+                  <p>
+                    Threats include pollution, overuse, and climate-driven
+                    droughts that challenge communities.
+                  </p>
+                  <span>Explore</span>
+                </div>
+                <div class="topic-card">
+                  <h5>Air (Atmosphere)</h5>
+                  <p>
+                    Sustainability targets focus on reducing air pollution and
+                    greenhouse gas emissions.
+                  </p>
+                  <span>Explore</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="why-card">
+              <h3>Why choose us?</h3>
+              <p>
+                Sustainable Business Union is a collaborative platform helping
+                businesses adopt future-ready, environmentally responsible, and
+                profitable sustainability solutions.
+              </p>
+              <button class="btn-see-topics">See all topics</button>
+            </aside>
+          </div>
+
+          <div class="bottom-grid">
+            <div class="newsletter-card">
+              <h3>Love green economy?<br />Sign up for our newsletter</h3>
+              <p>
+                …and even if you don’t understand it yet, sign up anyway – it’s
+                free to upgrade.
+              </p>
+
+              <div class="checkbox-row">
+                <input type="checkbox" id="newsletter-check" />
+                <label for="newsletter-check">
+                  Yes, subscribe me to your newsletter.
+                </label>
+              </div>
+
+              <form class="newsletter-form">
+                <input type="email" placeholder="Email*" required />
+                <button type="submit">Subscribe now</button>
+              </form>
+            </div>
+
+            <div class="contact-card">
+              <h3>Questions? Contact</h3>
+              <div class="contact-line">
+                <div class="contact-label">Email</div>
+                <div>info@sustainablebusinessunion.com</div>
+              </div>
+              <div class="contact-line">
+                <div class="contact-label">Address</div>
+                <div>Canary Wharf, London</div>
+              </div>
+              <div class="contact-line">
+                <div class="contact-label">Phone</div>
+                <div>+44 7770 264192</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <footer>
+        <div class="wrapper">
+          <span> 
+          <a href="/privacy">
+
+          &copy; 2025 Sustainable Business Union. Privacy Policy
+            </a>
+          </span>
+          
+          <span><a href="/terms">Terms & Conditions</a></span>
+        </div>
+      </footer>
+      <footer>
+
+    </div>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const track = document.querySelector(".carousel-track");
+  const slides = document.querySelectorAll(".slide");
+
+  let index = 0;
+
+  function updateSlide() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  // 🔥 FORCE INITIAL POSITION
+  setTimeout(updateSlide, 50);
+
+  document.querySelector(".next").onclick = () => {
+    index = (index + 1) % slides.length;
+    updateSlide();
+  };
+
+  document.querySelector(".prev").onclick = () => {
+    index = (index - 1 + slides.length) % slides.length;
+    updateSlide();
+  };
+
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/navbar.js" defer></script>
+<!-- <script src="/js/carousel.js"></script> -->
+  </body>
+</html>
