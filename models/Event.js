@@ -20,7 +20,14 @@ const eventSchema = new mongoose.Schema({
   location: {
     type: String,
     required: true
-  }
+  },
+
+  //tenant logic
+    tenantId:{
+ type: mongoose.Schema.Types.ObjectId,
+ ref:"Tenant",
+ required:true
+}
 }, { timestamps: true });
 
 module.exports = mongoose.model("Event", eventSchema);
