@@ -31,6 +31,11 @@ const eLibraryRoutes = require("./routes/eLibraryRoutes");
 //tenant logic 
 const Tenant = require("./models/Tenant");
 
+// for railways health check
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 
 app.set("trust proxy", 1);
 app.use(async (req, res, next) => {
