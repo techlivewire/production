@@ -120,7 +120,7 @@ header {
   gap: 0.6rem;
 }
 
-.logo-mark {
+/* .logo-mark {
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -131,6 +131,12 @@ header {
   color: var(--white);
   font-weight: 700;
   font-size: 0.85rem;
+} */
+.logo-img {
+  width: 50px;       /* adjust based on navbar */
+  height: 50px;
+  object-fit: contain;
+  overflow: hidden;
 }
 
 .logo-text {

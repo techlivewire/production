@@ -14,6 +14,8 @@
       rel="stylesheet">
 
     <!-- Font Awesome for social icons -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+     
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       integrity="sha512-Sn/e8bNG0Ax7Anxr1j403rwhhtjfiPgk41IrT9jp+1rssZCvGSqtEtFPi0PfrxGX2YeliYg+6TSGT+bVfVd4Yw=="
@@ -45,7 +47,7 @@
 
     <!-- Logo -->
     <a href="/" class="nav-logo">
-      <div class="logo-mark"><%= logo.logoMark %></div>
+       <img src="<%= logo.image %>" alt="SBU" class = "logo-img">
       <div class="logo-text">
         <span><%= logo.logoTextTop %></span>
         <span><%= logo.logoTextBottom %></span>
@@ -57,13 +59,17 @@
       <li><a href="#home">Home</a></li>
       <li><a href="#info">Info</a></li>
       <li><a href="#events">Events</a></li>
-      <!-- <li><a href="/library">Library</a></li> -->
       <a href="/elibrary">eLibrary</a>
       <li><a href="/contact">Contact</a></li>
     </ul>
 
-    <!-- Desktop CTA -->
-    <a href="#events" class="nav-cta">Get Tickets</a>
+
+    <% if (currentUser) { %>
+  <span>👤 <%= currentUserName %></span>
+  <a href="/logout" class = "logout">Logout</a>
+<% } else { %>
+  <a href="/signup" class = "signupLogin" >Sign-Up/Login</a>
+<% } %>
 
     <!-- Hamburger (mobile only) -->
     <button class="nav-hamburger" id="navHamburger" aria-label="Toggle menu" aria-expanded="false">☰</button>
@@ -71,16 +77,25 @@
   </div>
 </header>
 
-<!-- Mobile drawer — immediately after </header>, outside it -->
+<!-- Mobile drawer -->
 <div class="nav-drawer" id="navDrawer">
   <div class="nav-drawer-inner">
     <a href="#home">Home</a>
     <a href="#info">Info</a>
     <a href="#events">Events</a>
-    <!-- <a href="/library">Library</a> -->
     <a href="/elibrary">eLibrary</a>
     <a href="/contact">Contact</a>
-    <a href="#events" class="drawer-cta">Get Tickets</a>
+    
+    <% if (currentUser) { %>
+  <a href="/logout" class = "logout">Logout</a>
+<% } else { %>
+  <span>
+      <a href="/signup" class = "signupLogin">Sign-Up/Login</a>
+  <!-- <a href="/login">Login</a> -->
+
+  </span>
+
+<% } %>
   </div>
 </div>
 
@@ -90,17 +105,15 @@
       <section id="home" class="hero">
         <div class="hero-inner">
           <div>
-            <!-- <div class="hero-eyebrow">Renewable Energy</div> -->
              <div class="hero-eyebrow">
   <%= titles.heroEyebrow %>
 </div>
-            <!-- <div class="hero-title-main">GREEN TECH<br>REVOLUTION</div> -->
             <div class="hero-title-main"> <%= titles.title %> </div>
-            <!-- <div class="hero-subtitle">sustainable<br/>business union</div> -->
             <div class="hero-subtitle"><%= titles.subTitle %> </div>
         
             <div class="hero-url">
-              <a href="{{<%= titles.heroUrl %>}"> <%= titles.heroUrl %></a>
+              
+              <a href= <%= titles.heroUrl %>  target="_blank" rel="noopener noreferrer" > <%= titles.heroUrlText %></a>
   
 </div>
 

@@ -215,6 +215,39 @@ a {
   transform: scaleX(1);
 }
 
+.auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: Arial, sans-serif;
+}
+.auth .user {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+.logout {
+  text-decoration: none;
+  font-size: 13px;
+  color: #ff4d4d;
+  padding: 5px 10px;
+  border: 1px solid #ff4d4d;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+
+.signupLogin {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(0, 0, 0);
+  background: #cbd1d1;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+
+
 /* ── Desktop CTA button ─────────────────────────────────────── */
 .nav-cta {
   display: inline-flex;

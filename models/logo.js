@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const logoSchema = new mongoose.Schema({
-  logoMark: String,
+  // logoMark: String,
+  image: String,
   logoTextTop: String,
   logoTextBottom: String,
 

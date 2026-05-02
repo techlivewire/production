@@ -16,9 +16,8 @@
       <h2>Admin Panel</h2>
     <nav>
   <a class="active">Dashboard</a>
-
-  <!-- <a href="/admin/library">Library</a> -->
    <a href="/admin/elibrary">eLibrary</a>
+   <a href="/admin/users">Users</a>
 </nav>
     </aside>
 
@@ -140,6 +139,8 @@
     <input type="text" name="heroEyebrow" placeholder="Hero Eyebrow Text" />
     <h3>Hero URL</h3>
     <input type="text" name="heroUrl" placeholder="Hero URL (e.g. www.example.com)" />
+    <h3>Hero URL Text</h3>
+    <input type="text" name="heroUrlText" placeholder="Hero URL Text" />
 
   </div>
 
@@ -154,10 +155,11 @@
 <div class="card">
   <h2>Update Logo</h2>
 
-  <form action="/updateLogo" method="POST">
+  <form action="/updateLogo" method="POST" enctype="multipart/form-data">
     <div class="grid">
 
-      <input type="text" name="logoMark" placeholder="Logo Mark (e.g. SBU)" />
+      <!-- <input type="text" name="logoMark" placeholder="Logo Mark (e.g. SBU)" /> -->
+    <input type="file" name="image" accept="image/*" />
       <input type="text" name="logoTextTop" placeholder="Top Text" />
       <input type="text" name="logoTextBottom" placeholder="Bottom Text" />
 
@@ -210,22 +212,7 @@
 </form>
 </div>
 
-<div class="card">
-  <h2>Manage Pages</h2>
 
-  <form action="/updatePage" method="POST">
-    
-    <select name="name">
-      <option value="privacy">Privacy Policy</option>
-      <option value="terms">Terms & Conditions</option>
-    </select>
-
-    <textarea name="content" rows="8" placeholder="Enter page content..." required></textarea>
-
-    <button type="submit">Save</button>
-
-  </form>
-</div>
 
 
 

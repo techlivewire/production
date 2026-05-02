@@ -5,6 +5,7 @@ const titleSchema = new mongoose.Schema({
   subTitle: String,
   heroEyebrow: String,
   heroUrl: String,
+  heroUrlText : String,
 
   //tenant logic
     tenantId:{
