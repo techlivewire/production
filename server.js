@@ -67,11 +67,36 @@ app.use((req, res, next) => {
 });
 
 // ── Tenant ────────────────────────────────────────────────────────────────────
+// app.use(async (req, res, next) => {
+//   try {
+//     let host = req.hostname.toLowerCase();
+//     if (host.startsWith("www.")) host = host.replace("www.", "");
+//     req.tenant = await Tenant.findOne({ domain: host });
+//     next();
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+
+// middleware for tenant resolution
 app.use(async (req, res, next) => {
   try {
     let host = req.hostname.toLowerCase();
-    if (host.startsWith("www.")) host = host.replace("www.", "");
-    req.tenant = await Tenant.findOne({ domain: host });
+
+    if (host.startsWith("www.")) {
+      host = host.replace("www.", "");
+    }
+
+    // normalize (defensive coding)
+    host = host.replace(/\/$/, "");
+
+    console.log("HOST:", host);
+
+    req.tenant = await Tenant.findOne({
+      domain: host
+    });
+
     next();
   } catch (err) {
     next(err);
