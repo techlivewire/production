@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up – Sustainable Business Union</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f0e8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .auth-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 900px;
+      width: 100%;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.1);
+    }
+    @media(max-width:640px){ .auth-wrap { grid-template-columns: 1fr; } }
+
+    /* Left panel */
+    .auth-left {
+      background: #1c1430;
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: #fff;
+    }
+    @media(max-width:640px){ .auth-left { display: none; } }
+
+    .auth-left .logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+      color: #fff;
+    }
+    .auth-left .logo span { color: #e8701a; }
+
+    .auth-left h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .auth-left p {
+      font-size: .88rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+    .feature-list li {
+      font-size: .83rem;
+      color: rgba(255,255,255,.75);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .feature-list li::before {
+      content: '✓';
+      width: 20px; height: 20px;
+      background: #e8701a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Right panel */
+    .auth-right {
+      padding: 3rem 2.5rem;
+      overflow-y: auto;
+    }
+
+    .auth-right h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1c1430;
+      margin-bottom: .3rem;
+    }
+    .auth-right .subtitle {
+      font-size: .83rem;
+      color: #888;
+      margin-bottom: 1.75rem;
+    }
+    .auth-right .subtitle a {
+      color: #e8701a;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .error-box {
+      background: #ffebee;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      padding: .65rem .9rem;
+      font-size: .82rem;
+      color: #c62828;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; }
+    @media(max-width:480px){ .form-grid { grid-template-columns: 1fr; } }
+
+    .fg { display: flex; flex-direction: column; gap: .3rem; }
+    .fg.full { grid-column: 1/-1; }
+
+    .fg label {
+      font-size: .74rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #888;
+      font-weight: 600;
+    }
+    .fg label .req { color: #c62828; margin-left: .15rem; }
+
+    .fg input {
+      padding: .6rem .85rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: .88rem;
+      color: #1c1430;
+      background: #fafafa;
+      transition: border-color .2s, background .2s;
+    }
+    .fg input:focus {
+      outline: none;
+      border-color: #1c1430;
+      background: #fff;
+    }
+    .fg input.error { border-color: #c62828; }
+
+    .fg .hint { font-size: .72rem; color: #aaa; }
+
+    .btn-signup {
+      width: 100%;
+      padding: .75rem;
+      background: #1c1430;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      margin-top: 1.25rem;
+    }
+    .btn-signup:hover { background: #e8701a; }
+
+    .login-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: .82rem;
+      color: #888;
+    }
+    .login-link a { color: #1c1430; font-weight: 600; text-decoration: none; }
+    .login-link a:hover { color: #e8701a; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 1.25rem 0;
+      color: #ddd;
+      font-size: .78rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: #eee;
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+
+  <!-- Left -->
+  <div class="auth-left">
+    <div class="logo">SB<span>U</span></div>
+    <h2>Join the Sustainable Business Union</h2>
+    <p>Create your account to stay connected with our community, events and resources.</p>
+    <ul class="feature-list">
+      <li>Access to events and updates</li>
+      <li>Browse the eLibrary</li>
+      <li>Stay informed with latest news</li>
+      <li>Connect with the community</li>
+    </ul>
+  </div>
+
+  <!-- Right -->
+  <div class="auth-right">
+    <h1>Create Account</h1>
+    <p class="subtitle">Already have an account? <a href="/login">Sign in</a></p>
+
+    <% if (error) { %>
+      <div class="error-box">⚠️ <%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/signup">
+      <div class="form-grid">
+
+        <div class="fg full">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" name="name" value="<%= values.name || '' %>"
+            placeholder="Your full name" required
+            class="<%= error && !values.name ? 'error' : '' %>">
+        </div>
+
+        <div class="fg full">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" name="email" value="<%= values.email || '' %>"
+            placeholder="you@example.com" required>
+        </div>
+
+        <div class="fg">
+          <label>Password <span class="req">*</span></label>
+          <input type="password" name="password" placeholder="Min 6 characters" required>
+          <span class="hint">At least 6 characters</span>
+        </div>
+
+        <div class="fg">
+          <label>Confirm Password <span class="req">*</span></label>
+          <input type="password" name="confirmPassword" placeholder="Repeat password" required>
+        </div>
+
+        <div class="fg">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" value="<%= values.phone || '' %>"
+            placeholder="+91 99999 99999">
+        </div>
+
+        <div class="fg">
+          <label>Organization</label>
+          <input type="text" name="organization" value="<%= values.organization || '' %>"
+            placeholder="Company / Institution">
+        </div>
+
+      </div>
+
+      <button type="submit" class="btn-signup">Create Account →</button>
+    </form>
+
+    <div class="login-link">
+      Already have an account? <a href="/login">Sign in here</a>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
