@@ -223,8 +223,6 @@ app.get("/", async (req, res) => {
       other: "#f6a623"
     };
 
-    console.log(colors)
-
     const titles = await titleRepo.findOne({ tenantId }) || {
       title: "Green Technology",
       subTitle: "Welcome to our website",
@@ -256,6 +254,8 @@ app.get("/", async (req, res) => {
       description: "We are committed to innovation, growth, and smart technology solutions.",
       images: []
     };
+
+    
 
     res.render("index", {
       colors,
@@ -655,22 +655,35 @@ app.post("/updateColor", async (req, res) => {
 //   }
 // });
 
-app.post("/updateTitle", async (req, res) => {
+app.post("/updateTitle",  upload.single("image") , async (req, res) => {
   try {
     if (!req.tenant) return res.status(404).render("tenant-not-found")
 
     const tenantId = req.tenant._id;
     const { title, subTitle, heroEyebrow, heroUrl, heroUrlText } = req.body;
 
+
+    let updateData = {
+      title,
+      subTitle,
+      heroEyebrow,
+       heroUrl,
+        heroUrlText
+
+
+    }
+
+
+    // Only update image if a new file is uploaded
+      if (req.file) {
+      updateData.heroImage = "/uploads/" + req.file.filename;
+
+    }
+
+
     await titleRepo.findOneAndUpdate(
       { tenantId },
-      {
-        tenantId,
-        title,
-        subTitle,
-        heroEyebrow,
-        heroUrl
-      },
+      updateData,
       {
         upsert: true,
         new: true

@@ -127,7 +127,7 @@
 
       <div class="card">
   <h2>Public Site Title</h2>
-<form action="/updateTitle" method ="POST">
+<form action="/updateTitle" method ="POST" enctype="multipart/form-data">
     <div class="grid">
           
     
@@ -141,6 +141,10 @@
     <input type="text" name="heroUrl" placeholder="Hero URL (e.g. www.example.com)" />
     <h3>Hero URL Text</h3>
     <input type="text" name="heroUrlText" placeholder="Hero URL Text" />
+
+    <h3>Hero image</h3>
+    <input type="file" name="image" accept="image/*" />
+
 
   </div>
 

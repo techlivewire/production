@@ -248,9 +248,9 @@
     .hero-card-inner .hex {
       aspect-ratio: 4 / 3;
       border-radius: 20px;
-      background-image: url("hero-hex.jpg"); /* replace */
       background-size: cover;
       background-position: center;
+      overflow: hidden;
     }
 
     /* UPCOMING EVENTS SECTION */
