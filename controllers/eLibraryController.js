@@ -536,7 +536,8 @@ exports.searchPage = async (req, res) => {
     const page   = Math.max(1, parseInt(req.query.page) || 1);
     const filter = buildQuery(req.query);
     const sort   = buildSort(req.query.sort);
-    const hasSearch = Object.keys(req.query).some(k => k !== "page" && req.query[k]);
+    // const hasSearch = Object.keys(req.query).some(k => k !== "page" && req.query[k]);
+    const hasSearch = true;
 
     const [items, total] = await Promise.all([
       ELibraryItem.find(filter).sort(sort).skip((page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE).lean(),
