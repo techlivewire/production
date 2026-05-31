@@ -190,11 +190,19 @@
 
       <% } else if (item.fileUrl) { %>
 
-        <% if (item.isDownloadable) { %>
-          <a href="/elibrary/<%= item._id %>/download" class="btn-dl">
-            <i class="fas fa-download" style="margin-right:.4rem"></i>Download
-          </a>
-        <% } %>
+<% if (item.availability === 'full' || item.availability === 'preview') { %>
+  <% if (item.fileUrl) { %>
+    <a href="/elibrary/<%= item._id %>/file" target="_blank" class="btn-dl" style="background:#2e7d32;margin-bottom:.5rem">
+      <i class="fas fa-eye" style="margin-right:.4rem"></i>View
+    </a>
+  <% } %>
+<% } %>
+
+<% if (item.isDownloadable) { %>
+  <a href="/elibrary/<%= item._id %>/download" class="btn-dl">
+    <i class="fas fa-download" style="margin-right:.4rem"></i>Download
+  </a>
+<% } %>
 
         <% if (item.fileFormat === 'PDF') { %>
           <div class="pdf-viewer">
