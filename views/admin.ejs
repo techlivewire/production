@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <title>Event Admin Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- <link rel="stylesheet" href="/css/style.css" /> -->
-  <link rel="stylesheet" href="/css/style.css"  />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 
@@ -14,19 +13,17 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <h2>Admin Panel</h2>
-    <nav>
-  <a class="active">Dashboard</a>
-   <a href="/admin/elibrary">eLibrary</a>
-   <a href="/admin/users">Users</a>
-</nav>
+      <nav>
+        <a class="active">Dashboard</a>
+        <a href="/admin/elibrary">eLibrary</a>
+        <a href="/admin/users">Users</a>
+        <a href="/admin/pages">Pages</a>
+      </nav>
     </aside>
-
-
 
     <!-- Main -->
     <main class="main">
 
-      <!-- Header -->
       <header class="header">
         <h1>Event Dashboard</h1>
       </header>
@@ -34,17 +31,14 @@
       <!-- Add Event -->
       <section class="card">
         <h2>Add New Event</h2>
-
-        <form id="eventForm" method = "post" action = "addEvent" >
+        <form method="POST" action="/addEvent">
           <div class="grid">
-<input type="text" name="title" placeholder="Event Title" required />
-<input type="text" name="artists" placeholder="Artists / Acts" required />
-<input type="date" name="date" required />
-<input type="time" name="time" required />
-<input type="text" name="location" placeholder="Location" required />
-
+            <input type="text"  name="title"    placeholder="Event Title"    required />
+            <input type="text"  name="artists"  placeholder="Artists / Acts" required />
+            <input type="date"  name="date"                                  required />
+            <input type="time"  name="time"                                  required />
+            <input type="text"  name="location" placeholder="Location"       required />
           </div>
-
           <button type="submit">Add Event</button>
         </form>
       </section>
@@ -52,7 +46,6 @@
       <!-- Events List -->
       <section class="card">
         <h2>All Events</h2>
-
         <table>
           <thead>
             <tr>
@@ -63,167 +56,283 @@
               <th>Action</th>
             </tr>
           </thead>
-          <!-- <tbody id="eventTable"></tbody> -->
-           <tbody>
-  <% if (events.length === 0) { %>
-    <tr>
-      <td colspan="5">No events found</td>
-    </tr>
-  <% } %>
-
-  <% events.forEach(event => { %>
-<tr>
-  <td>
-    <%= event.date.toDateString() %><br>
-    <small><%= event.time %></small>
-  </td>
-  <td><%= event.title %></td>
-  <td><%= event.artists %></td>
-  <td><%= event.location %></td>
-
-  <td>
-  <!-- Edit Button -->
-  <a href="/editEvent/<%= event._id %>">
-    <button type="button">Edit</button>
-  </a>
-
-  <!-- Delete Button -->
-  <form method="POST" action="/deleteEvent/<%= event._id %>">
-    <button type="submit">Delete</button>
-  </form>
-</td>
-</tr>
-
-  <% }) %>
-</tbody>
-
+          <tbody>
+            <% if (events.length === 0) { %>
+              <tr><td colspan="5">No events found</td></tr>
+            <% } %>
+            <% events.forEach(event => { %>
+              <tr>
+                <td><%= event.date.toDateString() %><br><small><%= event.time %></small></td>
+                <td><%= event.title %></td>
+                <td><%= event.artists %></td>
+                <td><%= event.location %></td>
+                <td>
+                  <a href="/editEvent/<%= event._id %>"><button type="button">Edit</button></a>
+                  <form method="POST" action="/deleteEvent/<%= event._id %>">
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
         </table>
       </section>
 
+      <!-- Theme -->
       <div class="card">
-  <h2>Public Site Theme</h2>
-<form action="/updateColor" method ="POST">
-    <div class="grid">
-          
-    
-    <h4>Choose primary color</h4>
-    <input type="color" id="primary" title="Primary color" name = "primary">
-     <h4>Choose secondry color</h4>
-    <input type="color" id="secondary" title="Secondary color" name = "secondary">
-     <h4>Choose other color</h4>
-    <input type="color" id="other" title="Other color" name = "other">
-  </div>
+        <h2>Public Site Theme</h2>
+        <form action="/updateColor" method="POST">
+          <div class="grid">
+            <h4>Primary Color</h4>
+            <input type="color" name="primary"   value="<%= colors?.primary   || '#009344' %>">
+            <h4>Secondary Color</h4>
+            <input type="color" name="secondary" value="<%= colors?.secondary || '#006635' %>">
+            <h4>Other Color</h4>
+            <input type="color" name="other"     value="<%= colors?.other     || '#f6a623' %>">
+          </div>
+          <button type="submit">Update Public Theme</button>
+        </form>
+      </div>
 
-
-
-  <!-- <button onclick="updatePublicTheme()">Update Public Theme</button> -->
-  <button type ="submit" >Update Public Theme</button>
-  </form>
-
-</div>
-
-
-
-
+      <!-- Title -->
       <div class="card">
-  <h2>Public Site Title</h2>
-<form action="/updateTitle" method ="POST" enctype="multipart/form-data">
-    <div class="grid">
-          
-    
-    <h3>Hero Title</h3>
-    <input type="text" id="title" title="Primary color" name = "title" placeholder="Hero-Title">
-     <h3>Hero Sub Title </h3>
-    <input type="text" id="subTitle"  name = "subTitle" placeholder="Hero-Sub-Title">
-    <h3>Hero Eyebrow</h3>
-    <input type="text" name="heroEyebrow" placeholder="Hero Eyebrow Text" />
-    <h3>Hero URL</h3>
-    <input type="text" name="heroUrl" placeholder="Hero URL (e.g. www.example.com)" />
-    <h3>Hero URL Text</h3>
-    <input type="text" name="heroUrlText" placeholder="Hero URL Text" />
+        <h2>Public Site Title</h2>
+        <form action="/updateTitle" method="POST" enctype="multipart/form-data">
+          <div class="grid">
+            <h3>Hero Title</h3>
+            <input type="text" name="title"       value="<%= titles?.title       || '' %>" placeholder="Hero-Title">
+            <h3>Hero Sub Title</h3>
+            <input type="text" name="subTitle"    value="<%= titles?.subTitle    || '' %>" placeholder="Hero-Sub-Title">
+            <h3>Hero Eyebrow</h3>
+            <input type="text" name="heroEyebrow" value="<%= titles?.heroEyebrow || '' %>" placeholder="Hero Eyebrow Text">
+            <h3>Hero URL</h3>
+            <input type="text" name="heroUrl"     value="<%= titles?.heroUrl     || '' %>" placeholder="Hero URL">
+            <h3>Hero URL Text</h3>
+            <input type="text" name="heroUrlText" value="<%= titles?.heroUrlText || '' %>" placeholder="Hero URL Text">
+            <h3>Hero Image</h3>
+            <!-- <input type="file" name="image" accept="image/*"> -->
 
-    <h3>Hero image</h3>
-    <input type="file" name="image" accept="image/*" />
+            <% if (titles?.image) { %>
+  <img src="<%= titles.image %>" style="height:50px;border-radius:6px;margin-bottom:.5rem;display:block">
+  <small style="color:#888;font-size:.75rem">Current image — upload new to replace</small>
+<% } %>
+<input type="file" name="image" accept="image/*">
 
 
+          </div>
+          <button type="submit">Update Page Title</button>
+        </form>
+      </div>
+
+      <!-- Logo -->
+      <div class="card">
+        <h2>Update Logo</h2>
+        <form action="/updateLogo" method="POST" enctype="multipart/form-data">
+          <div class="grid">
+            <!-- <input type="file" name="image" accept="image/*"> -->
+
+            <% if (logo?.image) { %>
+  <img src="<%= logo.image %>" style="height:50px;border-radius:6px;margin-bottom:.5rem;display:block">
+  <small style="color:#888;font-size:.75rem">Current image — upload new to replace</small>
+<% } %>
+<input type="file" name="image" accept="image/*">
+
+
+            <input type="text" name="logoTextTop"    value="<%= logo?.logoTextTop    || '' %>" placeholder="Top Text">
+            <input type="text" name="logoTextBottom" value="<%= logo?.logoTextBottom || '' %>" placeholder="Bottom Text">
+          </div>
+          <button type="submit">Update Logo</button>
+        </form>
+      </div>
+
+      <!-- Col Card -->
+      <div class="card">
+        <h2>Col Card Section</h2>
+        <form action="/updateColCard" method="POST" enctype="multipart/form-data">
+          <div class="grid">
+            <input type="text" name="label"       value="<%= colCard?.label       || '' %>" placeholder="Label"       required>
+            <input type="text" name="heading"     value="<%= colCard?.heading     || '' %>" placeholder="Heading"     required>
+            <input type="text" name="description" value="<%= colCard?.description || '' %>" placeholder="Description" required>
+            <!-- <input type="file" name="images" multiple accept="image/*"> -->
+             <% if (colCard?.images?.length) { %>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+    <% colCard.images.forEach(img => { %>
+      <img src="<%= img %>" style="height:50px;border-radius:6px">
+    <% }) %>
   </div>
+  <small style="color:#888;font-size:.75rem">Current images — upload new to replace</small>
+<% } %>
+<input type="file" name="images" multiple accept="image/*">
+          </div>
+          <button type="submit">Update Section</button>
+        </form>
+      </div>
 
+      <!-- Video -->
+      <div class="card">
+        <h2>Update Video</h2>
+        <form action="/updateVideo" method="POST">
+          <input type="text" name="videoUrl" value="<%= video?.videoUrl || '' %>" placeholder="Paste YouTube embed URL">
+          <button type="submit">Update Video</button>
+        </form>
+      </div>
 
+      <!-- About -->
+      <div class="card">
+        <h2>Update About Section</h2>
+        <form action="/updateAbout" method="POST" enctype="multipart/form-data">
+          <div class="grid">
+            <input type="text" name="title"       value="<%= about?.title       || '' %>" placeholder="About Title"       required>
+            <input type="text" name="description" value="<%= about?.description || '' %>" placeholder="About Description" required>
+            <!-- <input type="file" name="images" multiple accept="image/*"> -->
 
-  <!-- <button onclick="updatePublicTheme()">Update Public Theme</button> -->
-  <button type ="submit" >Update Page Title</button>
-  </form>
-
-</div>
-
-<div class="card">
-  <h2>Update Logo</h2>
-
-  <form action="/updateLogo" method="POST" enctype="multipart/form-data">
-    <div class="grid">
-
-      <!-- <input type="text" name="logoMark" placeholder="Logo Mark (e.g. SBU)" /> -->
-    <input type="file" name="image" accept="image/*" />
-      <input type="text" name="logoTextTop" placeholder="Top Text" />
-      <input type="text" name="logoTextBottom" placeholder="Bottom Text" />
-
-    </div>
-
-    <button type="submit">Update Logo</button>
-  </form>
-</div>
-<div class="card">
-  <h2>Col Card Section</h2>
-
-
-<form action="/updateColCard" method="POST" enctype="multipart/form-data">
-  <div class="grid">
-
-    <input type="text" name="label" placeholder="Label" required />
-    <input type="text" name="heading" placeholder="Heading" required />
-    <input type="text" name="description" placeholder="Description" required />
-
-    <input type="file" name="images" multiple accept="image/*" />
-
+            <% if (about?.images?.length) { %>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+    <% about.images.forEach(img => { %>
+      <img src="<%= img %>" style="height:50px;border-radius:6px">
+    <% }) %>
   </div>
+  <small style="color:#888;font-size:.75rem">Current images — upload new to replace</small>
+<% } %>
+<input type="file" name="images" multiple accept="image/*">
+          </div>
+          <button type="submit">Update About</button>
+        </form>
+      </div>
 
-  <button type="submit">Update Section</button>
-</form>
-</div>
-<div class="card">
-  <h2>Update Video</h2>
 
-  <form action="/updateVideo" method="POST">
-    <input type="text" name="videoUrl" placeholder="Paste YouTube embed URL" />
-    <button type="submit">Update Video</button>
+
+
+            <!-- ── Deal Section ─────────────────────────────────────────────────── -->
+      <div class="card">
+        <h2>Deal Section</h2>
+        <form action="/updateDeal" method="POST">
+          <div class="grid">
+            <h3>Section Label</h3>
+            <input type="text" name="label" value="<%= siteContent?.deal?.label || '' %>" placeholder="e.g. Circular Economy">
+
+            <h3>Pill 1</h3>
+            <input type="text" name="pill1" value="<%= siteContent?.deal?.pill1 || '' %>" placeholder="Pill 1 text">
+
+            <h3>Pill 2</h3>
+            <input type="text" name="pill2" value="<%= siteContent?.deal?.pill2 || '' %>" placeholder="Pill 2 text">
+
+            <h3>Title</h3>
+            <input type="text" name="title" value="<%= siteContent?.deal?.title || '' %>" placeholder="e.g. The Deal">
+
+            <h3>Button Text</h3>
+            <input type="text" name="buttonText" value="<%= siteContent?.deal?.buttonText || '' %>" placeholder="Button text">
+
+            <h3>Card 1 Heading</h3>
+            <input type="text" name="card1Heading" value="<%= siteContent?.deal?.card1Heading || '' %>">
+            <h3>Card 1 Text</h3>
+            <input type="text" name="card1Text" value="<%= siteContent?.deal?.card1Text || '' %>">
+
+            <h3>Card 2 Heading</h3>
+            <input type="text" name="card2Heading" value="<%= siteContent?.deal?.card2Heading || '' %>">
+            <h3>Card 2 Text</h3>
+            <input type="text" name="card2Text" value="<%= siteContent?.deal?.card2Text || '' %>">
+
+            <h3>Card 3 Heading</h3>
+            <input type="text" name="card3Heading" value="<%= siteContent?.deal?.card3Heading || '' %>">
+            <h3>Card 3 Text</h3>
+            <input type="text" name="card3Text" value="<%= siteContent?.deal?.card3Text || '' %>">
+
+            <h3>Card 4 Heading</h3>
+            <input type="text" name="card4Heading" value="<%= siteContent?.deal?.card4Heading || '' %>">
+            <h3>Card 4 Text</h3>
+            <input type="text" name="card4Text" value="<%= siteContent?.deal?.card4Text || '' %>">
+          </div>
+          <button type="submit">Update Deal Section</button>
+        </form>
+      </div>
+
+      <!-- ── Topics Section ───────────────────────────────────────────────── -->
+      <div class="card">
+        <h2>Topics Section</h2>
+        <form action="/updateTopics" method="POST">
+          <div class="grid">
+            <h3>Label</h3>
+            <input type="text" name="label" value="<%= siteContent?.topics?.label || '' %>">
+            <h3>Heading</h3>
+            <input type="text" name="heading" value="<%= siteContent?.topics?.heading || '' %>">
+
+            <h3>Topic 1 Heading</h3>
+            <input type="text" name="topic1Heading" value="<%= siteContent?.topics?.topic1Heading || '' %>">
+            <h3>Topic 1 Text</h3>
+            <input type="text" name="topic1Text" value="<%= siteContent?.topics?.topic1Text || '' %>">
+
+            <h3>Topic 2 Heading</h3>
+            <input type="text" name="topic2Heading" value="<%= siteContent?.topics?.topic2Heading || '' %>">
+            <h3>Topic 2 Text</h3>
+            <input type="text" name="topic2Text" value="<%= siteContent?.topics?.topic2Text || '' %>">
+
+            <h3>Topic 3 Heading</h3>
+            <input type="text" name="topic3Heading" value="<%= siteContent?.topics?.topic3Heading || '' %>">
+            <h3>Topic 3 Text</h3>
+            <input type="text" name="topic3Text" value="<%= siteContent?.topics?.topic3Text || '' %>">
+
+            <h3>Why Choose Us Heading</h3>
+            <input type="text" name="whyHeading" value="<%= siteContent?.topics?.whyHeading || '' %>">
+            <h3>Why Choose Us Text</h3>
+            <input type="text" name="whyText" value="<%= siteContent?.topics?.whyText || '' %>">
+            <h3>Why Choose Us Button</h3>
+            <input type="text" name="whyButton" value="<%= siteContent?.topics?.whyButton || '' %>">
+          </div>
+          <button type="submit">Update Topics Section</button>
+        </form>
+      </div>
+
+      <!-- ── Newsletter ────────────────────────────────────────────────────── -->
+      <div class="card">
+        <h2>Newsletter Section</h2>
+        <form action="/updateNewsletter" method="POST">
+          <div class="grid">
+            <h3>Heading</h3>
+            <input type="text" name="heading" value="<%= siteContent?.newsletter?.heading || '' %>">
+            <h3>Description</h3>
+            <input type="text" name="description" value="<%= siteContent?.newsletter?.description || '' %>">
+            <h3>Checkbox Label</h3>
+            <input type="text" name="checkboxLabel" value="<%= siteContent?.newsletter?.checkboxLabel || '' %>">
+          </div>
+          <button type="submit">Update Newsletter</button>
+        </form>
+      </div>
+
+      <!-- ── Contact ───────────────────────────────────────────────────────── -->
+      <div class="card">
+        <h2>Contact Details</h2>
+        <form action="/updateContact" method="POST">
+          <div class="grid">
+            <h3>Email</h3>
+            <input type="text" name="email" value="<%= siteContent?.contact?.email || '' %>" placeholder="info@example.com">
+            <h3>Address</h3>
+            <input type="text" name="address" value="<%= siteContent?.contact?.address || '' %>" placeholder="City, Country">
+            <h3>Phone</h3>
+            <input type="text" name="phone" value="<%= siteContent?.contact?.phone || '' %>" placeholder="+44 0000 000000">
+          </div>
+          <button type="submit">Update Contact</button>
+        </form>
+      </div>
+
+
+<!-- this is moved to new sectin, in sidebar of the same page  -->
+<!-- <div class="card">
+  <h2>Manage Pages</h2>
+  <form action="/updatePage" method="POST">
+    <select name="name">
+      <option value="privacy">Privacy Policy</option>
+      <option value="terms">Terms & Conditions</option>
+    </select>
+    <textarea name="content" rows="10" placeholder="Enter full HTML content..." required style="width:100%;margin-top:.75rem;padding:.5rem;font-family:monospace;font-size:.82rem"></textarea>
+    <button type="submit" style="margin-top:.75rem">Save Page</button>
   </form>
-</div>
-
-<div class="card">
-  <h2>Update About Section</h2>
-
- <form action="/updateAbout" method="POST" enctype="multipart/form-data">
-  <div class="grid">
-
-    <input type="text" name="title" placeholder="About Title" required />
-    <input type="text" name="description" placeholder="About Description" required />
-
-    <input type="file" name="images" multiple accept="image/*" />
-
-  </div>
-
-  <button type="submit">Update About</button>
-</form>
-</div>
-
-
+</div> -->
 
 
 
     </main>
   </div>
 
-
-  
 </body>
 </html>

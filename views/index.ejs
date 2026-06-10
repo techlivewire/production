@@ -341,114 +341,81 @@
             <div class="deal-megaphone">
               <i class="fa-solid fa-bullhorn"></i>
             </div>
-            <div class="deal-label">Circular Economy</div>
-            <div class="deal-pills">
-              <span class="deal-pill">Everything you need</span>
-              <span class="deal-pill">To know</span>
+<div class="deal-label"><%= siteContent?.deal?.label || 'Circular Economy' %></div>            <div class="deal-pills">
+    <span class="deal-pill"><%= siteContent?.deal?.pill1 || 'Everything you need' %></span>
+<span class="deal-pill"><%= siteContent?.deal?.pill2 || 'To know' %></span>
+
             </div>
-            <h2 class="deal-title">The Deal</h2>
-          </div>
+<h2 class="deal-title"><%= siteContent?.deal?.title || 'The Deal' %></h2>          </div>
 
           <div class="deal-grid">
             <div class="deal-card">
-              <h4>Expert Guidance</h4>
-              <p>
-                Sustainable Business Union – a collaborative platform helping
-                businesses adopt future-ready, environmentally responsible, and
-                profitable sustainability solutions.
-              </p>
+              <h4><%= siteContent.deal.card1Heading %></h4>
+              <p><%= siteContent.deal.card1Text %></p>
             </div>
             <div class="deal-card">
-              <h4>Innovative Strategies</h4>
-              <p>
-                From circular economy models to climate-aligned roadmaps, we
-                help
-                you design strategies that work in the real world.
-              </p>
+              <h4><%= siteContent.deal.card2Heading %></h4>
+              <p><%= siteContent.deal.card2Text %></p>
             </div>
             <div class="deal-card">
-              <h4>Industry Network</h4>
-              <p>
-                Connect with partners, experts, and peers driving sustainability
-                across sectors and geographies.
-              </p>
+              <h4><%= siteContent.deal.card3Heading %></h4>
+              <p><%= siteContent.deal.card3Text %></p>
             </div>
             <div class="deal-card">
-              <h4>Impact Approach</h4>
-              <p>
-                Data-driven frameworks that measure environmental and business
-                impact so you can scale what works.
-              </p>
+              <h4><%= siteContent.deal.card4Heading %></h4>
+              <p><%= siteContent.deal.card4Text %></p>
             </div>
           </div>
 
-          <button class="btn-ghost">Apply to be subject matter expert</button>
+          <button class="btn-ghost"><%= siteContent.deal.buttonText %></button>
         </div>
       </section>
 
-      <!-- TOPICS + WHY CHOOSE US + NEWSLETTER + CONTACT -->
-      <section class="topics-section" id="contact">
-        <div class="topics-inner">
 
+
+
+      <!-- TOPICS + WHY CHOOSE US + NEWSLETTER + CONTACT -->
+             <section class="topics-section" id="contact">
+        <div class="topics-inner">
           <div class="topics-grid">
             <div class="topics-cards">
-              <div class="topics-label">Circular Economy</div>
-              <h3 class="topics-heading">Everything you need to explore</h3>
+              <div class="topics-label"><%= siteContent.topics.label %></div>
+              <h3 class="topics-heading"><%= siteContent.topics.heading %></h3>
 
               <div class="topics-columns">
                 <div class="topic-card">
-                  <h5>Earth (Land &amp; Soil)</h5>
-                  <p>
-                    Unsustainable use is leading to deforestation,
-                    desertification, and food insecurity.
-                  </p>
+                  <h5><%= siteContent.topics.topic1Heading %></h5>
+                  <p><%= siteContent.topics.topic1Text %></p>
                   <span>Explore</span>
                 </div>
                 <div class="topic-card">
-                  <h5>Water</h5>
-                  <p>
-                    Threats include pollution, overuse, and climate-driven
-                    droughts that challenge communities.
-                  </p>
+                  <h5><%= siteContent.topics.topic2Heading %></h5>
+                  <p><%= siteContent.topics.topic2Text %></p>
                   <span>Explore</span>
                 </div>
                 <div class="topic-card">
-                  <h5>Air (Atmosphere)</h5>
-                  <p>
-                    Sustainability targets focus on reducing air pollution and
-                    greenhouse gas emissions.
-                  </p>
+                  <h5><%= siteContent.topics.topic3Heading %></h5>
+                  <p><%= siteContent.topics.topic3Text %></p>
                   <span>Explore</span>
                 </div>
               </div>
             </div>
 
             <aside class="why-card">
-              <h3>Why choose us?</h3>
-              <p>
-                Sustainable Business Union is a collaborative platform helping
-                businesses adopt future-ready, environmentally responsible, and
-                profitable sustainability solutions.
-              </p>
-              <button class="btn-see-topics">See all topics</button>
+              <h3><%= siteContent.topics.whyHeading %></h3>
+              <p><%= siteContent.topics.whyText %></p>
+              <button class="btn-see-topics"><%= siteContent.topics.whyButton %></button>
             </aside>
           </div>
 
           <div class="bottom-grid">
             <div class="newsletter-card">
-              <h3>Love green economy?<br />Sign up for our newsletter</h3>
-              <p>
-                …and even if you don’t understand it yet, sign up anyway – it’s
-                free to upgrade.
-              </p>
-
+              <h3><%= siteContent.newsletter.heading %></h3>
+              <p><%= siteContent.newsletter.description %></p>
               <div class="checkbox-row">
                 <input type="checkbox" id="newsletter-check" />
-                <label for="newsletter-check">
-                  Yes, subscribe me to your newsletter.
-                </label>
+                <label for="newsletter-check"><%= siteContent.newsletter.checkboxLabel %></label>
               </div>
-
               <form class="newsletter-form">
                 <input type="email" placeholder="Email*" required />
                 <button type="submit">Subscribe now</button>
@@ -459,21 +426,21 @@
               <h3>Questions? Contact</h3>
               <div class="contact-line">
                 <div class="contact-label">Email</div>
-                <div>info@sustainablebusinessunion.com</div>
+                <div><%= siteContent.contact.email %></div>
               </div>
               <div class="contact-line">
                 <div class="contact-label">Address</div>
-                <div>Canary Wharf, London</div>
+                <div><%= siteContent.contact.address %></div>
               </div>
               <div class="contact-line">
                 <div class="contact-label">Phone</div>
-                <div>+44 7770 264192</div>
+                <div><%= siteContent.contact.phone %></div>
               </div>
             </div>
           </div>
-
         </div>
       </section>
+
 
       <footer>
         <div class="wrapper">

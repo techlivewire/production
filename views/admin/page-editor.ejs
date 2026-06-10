@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Page Editor – Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .editor-wrap { max-width: 860px; }
+
+    .page-tabs { display:flex; gap:.5rem; margin-bottom:1.5rem; }
+    .page-tab {
+      padding:.45rem 1.1rem; border:1px solid #ddd; border-radius:20px;
+      font-size:.85rem; cursor:pointer; background:#fff; color:#555;
+      font-family:inherit; transition:all .15s;
+    }
+    .page-tab.active { background:#1c1430; color:#fff; border-color:#1c1430; }
+
+    .section-block {
+      border:1px solid #e0dbd0;
+      border-radius:10px;
+      padding:1.25rem;
+      margin-bottom:1rem;
+      background:#fafaf8;
+      position:relative;
+    }
+    .section-block .block-top {
+      display:flex; align-items:center; gap:.75rem; margin-bottom:.85rem;
+    }
+    .section-num {
+      width:26px; height:26px; background:#1c1430; color:#fff;
+      border-radius:50%; display:flex; align-items:center; justify-content:center;
+      font-size:.75rem; font-weight:700; flex-shrink:0;
+    }
+    .section-block input[type="text"] {
+      flex:1; padding:.5rem .8rem; border:1px solid #ddd; border-radius:7px;
+      font-size:.88rem; font-family:inherit; color:#1c1430; background:#fff;
+    }
+    .section-block input[type="text"]:focus { outline:none; border-color:#1c1430; }
+
+    .points-list { display:flex; flex-direction:column; gap:.4rem; margin-left:2rem; }
+    .point-row { display:flex; gap:.5rem; align-items:center; }
+    .point-row input {
+      flex:1; padding:.45rem .75rem; border:1px solid #ddd; border-radius:7px;
+      font-size:.84rem; font-family:inherit; color:#333; background:#fff;
+    }
+    .point-row input:focus { outline:none; border-color:#1c1430; }
+
+    .btn-remove-point {
+      width:26px; height:26px; background:#ffebee; color:#c62828;
+      border:none; border-radius:50%; cursor:pointer; font-size:1rem;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0; line-height:1;
+    }
+    .btn-add-point {
+      margin-left:2rem; margin-top:.35rem;
+      padding:.3rem .8rem; background:#e8f5e9; color:#2e7d32;
+      border:1px solid #c8e6c9; border-radius:6px; font-size:.78rem;
+      cursor:pointer; font-family:inherit; transition:background .15s;
+    }
+    .btn-add-point:hover { background:#c8e6c9; }
+
+    .btn-remove-section {
+      position:absolute; top:.85rem; right:.85rem;
+      padding:.25rem .65rem; background:#ffebee; color:#c62828;
+      border:1px solid #ffcdd2; border-radius:6px; font-size:.75rem;
+      cursor:pointer; font-family:inherit;
+    }
+    .btn-remove-section:hover { background:#ffcdd2; }
+
+    .btn-add-section {
+      display:flex; align-items:center; gap:.4rem;
+      padding:.55rem 1.1rem; background:#fff; border:1px dashed #bbb;
+      border-radius:8px; font-size:.85rem; cursor:pointer;
+      color:#555; font-family:inherit; transition:all .15s;
+      margin-bottom:1.25rem;
+    }
+    .btn-add-section:hover { border-color:#1c1430; color:#1c1430; background:#fafaf8; }
+
+    .btn-save {
+      padding:.6rem 1.5rem; background:#1c1430; color:#fff;
+      border:none; border-radius:8px; font-size:.9rem; font-weight:600;
+      cursor:pointer; font-family:inherit; transition:background .2s;
+    }
+    .btn-save:hover { background:#e8701a; }
+
+    .meta-row { display:flex; gap:1rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+    .meta-row .fg { display:flex; flex-direction:column; gap:.3rem; flex:1; min-width:180px; }
+    .meta-row label { font-size:.72rem; letter-spacing:.07em; text-transform:uppercase; color:#888; font-weight:600; }
+    .meta-row input { padding:.5rem .8rem; border:1px solid #ddd; border-radius:7px; font-size:.85rem; font-family:inherit; }
+    .meta-row input:focus { outline:none; border-color:#1c1430; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <nav>
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/elibrary">eLibrary</a>
+      <a href="/admin/users">Users</a>
+      <a href="/admin/pages" class="active">Pages</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header"><h1>Page Editor</h1></header>
+
+    <section class="card editor-wrap">
+
+      <!-- Page selector tabs -->
+      <div class="page-tabs">
+        <button type="button" class="page-tab active" onclick="switchPage('privacy', this)">Privacy Policy</button>
+        <button type="button" class="page-tab"        onclick="switchPage('terms', this)">Terms & Conditions</button>
+      </div>
+
+      <form method="POST" action="/updatePageStructured" id="pageForm">
+        <input type="hidden" name="name" id="pageName" value="privacy">
+
+        <!-- Meta -->
+        <div class="meta-row">
+          <div class="fg">
+            <label>Page Title</label>
+            <input type="text" name="pageTitle" id="pageTitle" placeholder="e.g. Privacy Policy">
+          </div>
+          <div class="fg">
+            <label>Last Updated</label>
+            <input type="text" name="lastUpdated" id="lastUpdated" placeholder="e.g. March 2026">
+          </div>
+        </div>
+
+        <!-- Sections -->
+        <div id="sectionsWrap"></div>
+
+        <button type="button" class="btn-add-section" onclick="addSection()">
+          + Add Section
+        </button>
+
+        <button type="submit" class="btn-save">Save Page</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+// ── Data from server (injected) ───────────────────────────────────────────────
+const pagesData = <%- JSON.stringify(pagesData) %>;
+
+let currentPage = "privacy";
+
+function switchPage(name, btn) {
+  currentPage = name;
+  document.getElementById("pageName").value = name;
+  document.querySelectorAll(".page-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  loadPage(name);
+}
+
+function loadPage(name) {
+  const data = pagesData[name] || { pageTitle: "", lastUpdated: "", sections: [] };
+  document.getElementById("pageTitle").value    = data.pageTitle    || "";
+  document.getElementById("lastUpdated").value  = data.lastUpdated  || "";
+  document.getElementById("sectionsWrap").innerHTML = "";
+  (data.sections || []).forEach(sec => addSection(sec));
+}
+
+let sectionCount = 0;
+
+function addSection(data = {}) {
+  sectionCount++;
+  const idx  = sectionCount;
+  const wrap = document.getElementById("sectionsWrap");
+
+  const div = document.createElement("div");
+  div.className   = "section-block";
+  div.dataset.idx = idx;
+
+  div.innerHTML = `
+    <button type="button" class="btn-remove-section" onclick="removeSection(this)">✕ Remove</button>
+    <div class="block-top">
+      <div class="section-num">${wrap.children.length + 1}</div>
+      <input type="text" name="sections[${idx}][heading]"
+        value="${escHtml(data.heading || '')}"
+        placeholder="Section heading e.g. 1. Information We Collect">
+    </div>
+    <div class="points-list" id="points-${idx}"></div>
+    <button type="button" class="btn-add-point" onclick="addPoint(${idx})">+ Add Point</button>
+  `;
+
+  wrap.appendChild(div);
+
+  // Add existing points
+  (data.points || [""]).forEach(pt => addPoint(idx, pt));
+
+  renumberSections();
+}
+
+let pointCounters = {};
+
+function addPoint(sectionIdx, value = "") {
+  if (!pointCounters[sectionIdx]) pointCounters[sectionIdx] = 0;
+  pointCounters[sectionIdx]++;
+  const pIdx = pointCounters[sectionIdx];
+
+  const list = document.getElementById(`points-${sectionIdx}`);
+  const row  = document.createElement("div");
+  row.className = "point-row";
+  row.innerHTML = `
+    <input type="text" name="sections[${sectionIdx}][points][]"
+      value="${escHtml(value)}" placeholder="Enter point…">
+    <button type="button" class="btn-remove-point" onclick="this.parentElement.remove()">×</button>
+  `;
+  list.appendChild(row);
+}
+
+function removeSection(btn) {
+  btn.closest(".section-block").remove();
+  renumberSections();
+}
+
+function renumberSections() {
+  document.querySelectorAll(".section-block .section-num").forEach((el, i) => {
+    el.textContent = i + 1;
+  });
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+// Load privacy on init
+loadPage("privacy");
+</script>
+</body>
+</html>
