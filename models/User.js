@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema(
     phone:        { type: String, trim: true, default: "" },
     organization: { type: String, trim: true, default: "" },
     isActive:     { type: Boolean, default: true },
-    lastLogin:    { type: Date },
+    lastLogin:    { type: Date }, 
+    role: {type : String, default : "Client"}
   },
   { timestamps: true }
 );

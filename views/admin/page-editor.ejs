@@ -144,7 +144,7 @@
 
 <script>
 // ── Data from server (injected) ───────────────────────────────────────────────
-const pagesData = <%- JSON.stringify(pagesData) %>;
+const pagesData = <%- JSON.stringify(pagesData || {}) %>;
 
 let currentPage = "privacy";
 
