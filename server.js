@@ -60,13 +60,24 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true }
 }));
 
+
+
+// auth the admin
+function requireAdmin(req, res, next) {
+  if (!req.session.userId || req.session.userRole !== "admin") {
+    return res.status(403).render("errors/403");
+  }
+  next();
+}
+
 // ── Global locals ─────────────────────────────────────────────────────────────
+
 app.use((req, res, next) => {
-  res.locals.currentUser     = req.session.userId   || null;
+  res.locals.currentUser     = req.session.userId || null;
   res.locals.currentUserName = req.session.userName || null;
+  res.locals.userRole        = req.session.userRole || null;
   next();
 });
-
 // ── Tenant ────────────────────────────────────────────────────────────────────
 // app.use(async (req, res, next) => {
 //   try {
@@ -268,7 +279,7 @@ app.get("/", async (req, res) => {
 
 // for form pre fill  
 
-app.get("/admin", async (req, res) => {
+app.get("/admin", requireAdmin , async (req, res) => {
   try {
     if (!req.tenant) return res.status(404).render("tenant-not-found");
     const tenantId = req.tenant._id;

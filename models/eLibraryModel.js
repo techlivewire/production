@@ -105,7 +105,21 @@ const eLibraryItemSchema = new mongoose.Schema(
 );
 
 // Indexes
-eLibraryItemSchema.index({ title: "text", description: "text", tags: "text" });
+// eLibraryItemSchema.index({ title: "text", description: "text", tags: "text" });
+
+eLibraryItemSchema.index(
+  {
+    title: "text",
+    description: "text",
+    tags: "text"
+  },
+  {
+    default_language: "english",
+    language_override: "mongo_text_language"
+  }
+);
+
+
 eLibraryItemSchema.index({ libraryType: 1, createdAt: -1 });
 eLibraryItemSchema.index({ "basic.category": 1 });
 eLibraryItemSchema.index({ "spiritual.scriptureName": 1 });

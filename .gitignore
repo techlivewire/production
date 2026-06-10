@@ -60,3 +60,15 @@ server1.js
 *.bak
 *.backup
 *.orig
+
+
+temp/
+
+
+*.zip
+~$*.xlsx
+
+
+temp/
+*.zip
+~$*.xlsx

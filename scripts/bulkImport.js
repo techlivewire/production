@@ -65,6 +65,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+console.log("ADMIN IMPORT EXECUTED");
+
 require("dotenv").config();
 const path    = require("path");
 const fs      = require("fs");
@@ -313,7 +315,8 @@ async function main() {
       if (str(row.fileName) && !extractedFiles[str(row.fileName).toLowerCase()]) {
         console.warn(`   ⚠️   Row ${rowNum}: fileName "${row.fileName}" not found in ZIP — saved without file`);
       }
-
+console.log("DOC TO INSERT:");
+console.dir(doc, { depth: null });
       await ELibraryItem.create(doc);
       inserted++;
       console.log(`   ✅  Row ${rowNum}: "${doc.title}" [${doc.libraryType}]`);
@@ -327,8 +330,21 @@ async function main() {
     
     } catch (err) {
   errors++;
-  console.error("FULL ERROR OBJECT:", err);
-  console.error("STACK TRACE:\n", err.stack);
+
+  console.error("================================");
+  console.error("ROW:", rowNum);
+  console.error("TITLE:", row.title);
+  console.error("DATA:", JSON.stringify(row, null, 2));
+  console.error("ERROR:", err);
+  console.error("STACK:", err.stack);
+  console.error("================================");
+
+  log.push({
+    type: "error",
+    row: rowNum,
+    title: str(row.title),
+    msg: err.message
+  });
 }
   }
 

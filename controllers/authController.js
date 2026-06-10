@@ -52,6 +52,7 @@ exports.signup = async (req, res) => {
     // Auto login after signup
     req.session.userId   = user._id;
     req.session.userName = user.name;
+    req.session.userRole = user.role; 
 
     res.redirect("/");
 } catch (err) {
@@ -94,6 +95,7 @@ exports.login = async (req, res) => {
 
     req.session.userId   = user._id;
     req.session.userName = user.name;
+    req.session.userRole = user.role; 
 
     res.redirect("/");
   } catch (err) {

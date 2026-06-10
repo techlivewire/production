@@ -374,7 +374,8 @@
 //   }
 // };
 
-
+console.log("RUNNING:", __filename);
+const mongoose = require("mongoose");
 const ELibraryItem = require("../models/eLibraryModel");
 const path  = require("path");
 const fs    = require("fs");
@@ -661,6 +662,7 @@ exports.adminImportForm = (req, res) => {
 };
 
 exports.adminImport = async (req, res) => {
+    console.log("ADMIN IMPORT REACHED");
   const tempFiles = [];
 
   try {
@@ -728,14 +730,31 @@ exports.adminImport = async (req, res) => {
           log.push({ type: "warn", row: rowNum, title: doc.title, msg: fileWarning });
         }
 
+        // console.log("DB NAME:", mongoose.connection.db.databaseName);
+// console.log("COLLECTION:", ELibraryItem.collection.name);
+
         await ELibraryItem.create(doc);
         inserted++;
         log.push({ type: "ok", row: rowNum, title: doc.title, msg: `Imported as ${doc.libraryType}` });
 
       } catch (err) {
-        errors++;
-        log.push({ type: "error", row: rowNum, title: str(row.title), msg: err.message });
-      }
+  errors++;
+
+  console.log("================================");
+  console.log("ROW:", rowNum);
+  console.log("TITLE:", row.title);
+  console.dir(err, { depth: null });
+  console.log("MESSAGE:", err.message);
+  console.log("STACK:", err.stack);
+  console.log("================================");
+
+  log.push({
+    type: "error",
+    row: rowNum,
+    title: str(row.title),
+    msg: err.message
+  });
+}
     }
 
     // Cleanup temp files
