@@ -94,7 +94,7 @@ exports.login = async (req, res) => {
     await user.save();
 
     req.session.userId   = user._id;
-    req.session.userName = user.name;
+    req.session.userName = user.name.split(" ")[0];
     req.session.userRole = user.role; 
 
     res.redirect("/");
