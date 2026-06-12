@@ -281,6 +281,10 @@
     display: none;
   }
 
+  .logout{
+      display: none;
+  }
+
   .nav-hamburger {
     display: flex;
   }

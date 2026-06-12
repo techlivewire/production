@@ -67,6 +67,9 @@
       <li><a href="#events">Events</a></li>
       <a href="/elibrary">eLibrary</a>
       <li><a href="/contact">Contact</a></li>
+      <% if (userRole === "admin") { %>
+  <li> <a href="/admin">Admin</a> </li>
+<% } %>
     </ul>
 
 
@@ -77,9 +80,7 @@
   <a href="/signup" class = "signupLogin" >Sign-Up/Login</a>
 <% } %>
 
-<% if (userRole === "admin") { %>
-  <a href="/admin">Admin Panel</a>
-<% } %>
+
 
 
     <!-- Hamburger (mobile only) -->
@@ -96,13 +97,16 @@
     <a href="#events">Events</a>
     <a href="/elibrary">eLibrary</a>
     <a href="/contact">Contact</a>
+    <% if (userRole === "admin") { %>
+   <a href="/admin">Admin</a>
+<% } %>
     
     <% if (currentUser) { %>
   <a href="/logout" class = "logout">Logout</a>
 <% } else { %>
   <span>
       <a href="/signup" class = "signupLogin">Sign-Up/Login</a>
-  <!-- <a href="/login">Login</a> -->
+
 
   </span>
 
