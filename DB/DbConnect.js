@@ -7,7 +7,7 @@
 
 const mongoose = require("mongoose");
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://eLibrarySystem:eLibrarySystem@cluster0.9mxtrby.mongodb.net/journaldb?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI;
 console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
 
 

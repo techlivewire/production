@@ -93,7 +93,7 @@ if (!args.excel || !args.zip) {
 const EXCEL_PATH   = path.resolve(args.excel);
 const ZIP_PATH     = path.resolve(args.zip);
 const UPLOAD_DIR   = path.resolve(__dirname, "../public/uploads");
-const MONGO_URI    = process.env.MONGO_URI || 'mongodb+srv://eLibrarySystem:eLibrarySystem@cluster0.9mxtrby.mongodb.net/journaldb?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_URI    = process.env.MONGO_URI;
 
 
 
