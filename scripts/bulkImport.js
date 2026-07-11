@@ -93,7 +93,11 @@ if (!args.excel || !args.zip) {
 const EXCEL_PATH   = path.resolve(args.excel);
 const ZIP_PATH     = path.resolve(args.zip);
 const UPLOAD_DIR   = path.resolve(__dirname, "../public/uploads");
+<<<<<<< HEAD
 const MONGO_URI    = process.env.MONGO_URI ;
+=======
+const MONGO_URI    = process.env.MONGO_URI;
+>>>>>>> bfb0ebbd2fbd22c99d4684b6968b1e3e9fc143c9
 
 
 
