@@ -110,7 +110,7 @@ console.log("typeof:", typeof Tenant);
 console.log("create:", Tenant.create);
 
 
-mongoose.connect("mongodb+srv://eLibrarySystem:eLibrarySystem@cluster0.9mxtrby.mongodb.net/journaldb?retryWrites=true&w=majority&appName=Cluster0").then(async () => {
+mongoose.connect(process.env.MONGO_URI).then(async () => {
 
   // 1. Green Technology (Main Landing Page)
   const green = await Tenant.create({
