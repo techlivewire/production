@@ -460,9 +460,17 @@
       </section>
 
 
-<ul style="list-style-type: none; display: flex; justify-content: space-evenly; width: 20vw">
-  <li> <a href="/admin" class="admin">Admin</a> </li>
+<ul class="admin-logout-btn">
+  <% if (currentUser) { %>
   <li><a href="/logout" class = "logout">Logout</a></li>
+  <%}%>
+  <% if (userRole === "admin") { %>
+  
+
+  <li> <a href="/admin" class="admin">Admin</a> </li>
+
+<% } %>
+  
 </ul>
 
       <footer>

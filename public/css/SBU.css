@@ -253,7 +253,9 @@ a {
   background-color: #579f15;
   color: black;  
 }
-
+.admin-logout-btn{
+  list-style-type: none; display: flex; justify-content: space-between; width: 15vw;
+}
 
 .signupLogin {
   text-decoration: none;
