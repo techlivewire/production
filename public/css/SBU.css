@@ -239,6 +239,22 @@ a {
   background-color: #ffb8b8;
   color: black;  
 }
+<<<<<<< HEAD
+=======
+.admin{
+  text-decoration: none;
+  font-size: 13px;
+  color: #195f1b;
+  padding: 5px 10px;
+  border: 1px solid #195f1b;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+.admin:hover {
+  background-color: #579f15;
+  color: black;  
+}
+>>>>>>> 92360aa (admin log button postion change)
 
 .signupLogin {
   text-decoration: none;

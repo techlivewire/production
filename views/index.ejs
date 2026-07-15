@@ -68,14 +68,23 @@
       <a href="/elibrary">eLibrary</a>
       <li><a href="/contact">Contact</a></li>
       <% if (userRole === "admin") { %>
+<<<<<<< HEAD
   <li> <a href="/admin">Admin</a> </li>
+=======
+  <!-- <li> <a href="/admin">Admin</a> </li> -->
+>>>>>>> 92360aa (admin log button postion change)
 <% } %>
     </ul>
 
 
     <% if (currentUser) { %>
+<<<<<<< HEAD
   <span>👤 <%= currentUserName %></span>
   <a href="/logout" class = "logout">Logout</a>
+=======
+  <!-- <span>👤 <%= currentUserName %></span> -->
+  <!-- <a href="/logout" class = "logout">Logout</a> -->
+>>>>>>> 92360aa (admin log button postion change)
 <% } else { %>
   <a href="/signup" class = "signupLogin" >Register</a>
 <% } %>
@@ -453,7 +462,14 @@
         </div>
       </section>
 
+<<<<<<< HEAD
 
+=======
+<ul style="list-style-type: none; display: flex; justify-content: space-evenly; width: 20vw">
+  <li> <a href="/admin" class="admin">Admin</a> </li>
+  <li><a href="/logout" class = "logout">Logout</a></li>
+</ul>
+>>>>>>> 92360aa (admin log button postion change)
       <footer>
         <div class="wrapper">
           <span> 
